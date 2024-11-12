@@ -52,7 +52,7 @@
 }
 
 .register-page__form-group input {
-  width: 100%;
+  width: 95%;
   padding: 0.5rem;
   font-size: 1rem;
   border: 1px solid #ced4da;
@@ -90,7 +90,7 @@
 }
 
 .register-page__button:disabled {
-  cursor: not-allowed; /* 비활성화된 버튼에 클릭할 수 없다는 표시 */
-  background-color: #d6d6d6; /* 비활성화된 버튼 배경 색상 */
-  color: #a0a0a0; /* 비활성화된 버튼 텍스트 색상 */
+  cursor: not-allowed;
+  background-color: #d6d6d6;
+  color: #a0a0a0;
 }
