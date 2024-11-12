@@ -8,6 +8,23 @@ import api from '../../utils/api';
 // 4. googleLogin
 // 5. logout
 
+// Sign-up
+export const registerUser = createAsyncThunk(
+  'user/registerUser',
+  async ({ name, email, password, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/user', { email, name, password });
+      window.alert('Congratulations on signing up!');
+
+      navigate('/login');
+      return response.data.data;
+    } catch (error) {
+      console.log('Error:', error.response);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -21,7 +38,21 @@ const userSlice = createSlice({
       state.error = null;
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.success = true;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.error = action.payload;
+      });
+  },
 });
 
 export default userSlice.reducer;

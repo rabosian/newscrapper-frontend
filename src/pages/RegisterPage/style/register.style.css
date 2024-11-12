@@ -1,0 +1,96 @@
+/* 전체 컨테이너 */
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+/* 등록 박스 */
+.register-page__box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.register-page__title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* 에러 및 성공 메시지 */
+.register-page__error-message {
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.register-page__success-message {
+  color: green;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* 폼 그룹 */
+.register-page__form-group {
+  margin-bottom: 1rem;
+}
+
+.register-page__form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.register-page__form-group input {
+  width: 95%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+/* 정책 체크박스 */
+.register-page__form-group.register-page__policy-container {
+  display: flex;
+}
+
+.register-page__form-group.register-page__policy-container input {
+  margin-right: 8px;
+  width: auto;
+}
+
+.register-page__form-group.register-page__policy-container label {
+  margin: 0;
+}
+
+/* 등록 버튼 */
+.register-page__button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.register-page__button:hover {
+  background-color: #0056b3;
+}
+
+.register-page__button:disabled {
+  cursor: not-allowed;
+  background-color: #d6d6d6;
+  color: #a0a0a0;
+}
