@@ -1,19 +1,20 @@
 import axios from "axios";
 
 const BACKEND_URL = `${process.env.REACT_APP_BACKEND_URL}/api`
+const JWT = sessionStorage.getItem("token")
 
 const api = axios.create({
   baseURL: BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
-    authorization: "Bearer " + sessionStorage.getItem("token"),
+    authorization: "Bearer " + JWT,
   },
 });
 
 api.interceptors.request.use(
   (request) => {
-    if (token) {
-      request.headers.authorization = `Bearer ${token}`;
+    if (JWT) {
+      request.headers.authorization = `Bearer ${JWT}`;
     }
     return request;
   },
