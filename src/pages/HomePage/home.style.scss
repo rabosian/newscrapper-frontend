@@ -1,0 +1,202 @@
+.home {
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+  padding: 1em;
+  padding-bottom: 4em;
+
+  .wrapper {
+    margin: 0;
+  }
+
+  &__top-height {
+    height: 5em;
+    display: flex;
+    align-items: center;
+  }
+}
+
+//-------- ASIDE STYLING STARTS HERE --------//
+.home__aside {
+  display: flex;
+  flex-direction: column;
+
+  &-sticky {
+    position: sticky;
+    top: 2em;
+    padding-bottom: 4em;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  &-box {
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+  }
+
+  &-profile {
+    padding: 1.5em 4.5em;
+    background-color: var(--clr-bg-lgt);
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: center;
+
+    svg {
+      fill: none;
+      stroke-width: 2px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-left: auto;
+      color: var(--clr-font-md);
+      cursor: pointer;
+      &:hover {
+        color: var(--clr-font);
+      }
+    }
+
+    .image-container {
+      width: 6em;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+  }
+
+  &-name {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  &-category {
+    border-radius: 1em;
+    padding: 2em;
+    background-color: var(--clr-bg-lgt);
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+  }
+
+  h3 {
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+
+  &-item {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: capitalize;
+    color: var(--clr-font);
+  }
+}
+
+//-------- LANDING STYLING STARTS HERE --------//
+.home__landing {
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    font-weight: bolder;
+    font-size: 1.6em;
+  }
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2em;
+  }
+
+  a:hover .home__landing-text h2,
+  .image-container:hover ~ .home__landing-content .home__landing-text h2 {
+    text-decoration: underline;
+  }
+
+  h2 {
+    color: var(--clr-font);
+    font-weight: bold;
+  }
+  p {
+    color: var(--clr-font-md);
+  }
+
+  .image-container {
+    aspect-ratio: 3/2;
+    width: 100%;
+    border-radius: 1em;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .no-image {
+    width: 100%;
+    aspect-ratio: 3/2;
+    background-color: rgb(57, 56, 130);
+  }
+
+  &-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 100%;
+  }
+
+  &-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  &-details {
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  &-date {
+    display: flex;
+    align-items: center;
+    color: var(--clr-font);
+  }
+
+  &-stats {
+    display: flex;
+    gap: 1em;
+    button {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      font-weight: bold;
+      color: var(--clr-font);
+      &:hover svg {
+        color: var(--clr-font);
+      }
+    }
+    svg {
+      fill: none;
+      stroke-width: 1px;
+      color: rgb(145, 145, 145);
+    }
+  }
+}
+
+@media (max-width: 920px) {
+  .home__aside {
+    display: none;
+  }
+}
