@@ -6,6 +6,8 @@
 }
 body {
   background-color: var(--clr-bg);
+  font-weight: 400;
+  font-family: var(--font-primary);
 }
 h1,
 h2,
@@ -14,6 +16,7 @@ h4,
 h5 {
   font-weight: 400;
   font-size: 1rem;
+  color: var(--font-drk);
 }
 a {
   text-decoration: none;
@@ -25,6 +28,7 @@ button {
   background-color: transparent;
   border: none;
   cursor: pointer;
+  font-family: var(--font-primary);
 }
 
 /* max-width wrapper */

@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+/* 'Poppins', sans-serif */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+/* "Lato", sans-serif; */
+
 :root {
   /* main colors */
   --clr-primary: #fff;
   --clr-secondary: #fff;
   --clr-drk: #222222;
+  --clr-highlight: #3c4bd2;
 
   /* font colors */
   --clr-font: #424242;
@@ -22,4 +28,7 @@
 
   /* max width */
   --w-max: 1888px;
+
+  /* font family */
+  --font-primary: 'Lato', sans-serif;
 }
