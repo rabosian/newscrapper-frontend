@@ -11,6 +11,7 @@ export const getArticles = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get('/articles');
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);
@@ -36,12 +37,12 @@ const articleSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getArticles.pending, (state, action) => {
-        state.loading = ture;
+        state.loading = true;
       })
       .addCase(getArticles.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
-        state.articleList = action.payload.data;
+        state.articleList = action.payload.articles;
         state.totalArticleCount = action.payload.totalArticleCount;
       })
       .addCase(getArticles.rejected, (state, action) => {
