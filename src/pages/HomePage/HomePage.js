@@ -55,7 +55,7 @@ function HomeAside({ categories }) {
             <h3>Category</h3>
             <div className="home__aside-content">
               {categories.map((item) => (
-                <Link className="home__aside-item" to={'/'}>
+                <Link className="home__aside-item" to={'/'} key={item}>
                   {item}
                 </Link>
               ))}
