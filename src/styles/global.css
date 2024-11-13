@@ -52,13 +52,6 @@ button {
 }
 
 /* media body font-size */
-
-@media (max-width: 1200px) {
-  body {
-    /* font-size: 0.9rem; */
-  }
-}
-
 @media (max-width: 800px) {
   body {
     font-size: 0.9rem;

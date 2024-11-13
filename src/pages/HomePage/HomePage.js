@@ -64,7 +64,7 @@ function HomeAside({ categories }) {
             <h3>Category</h3>
             <div className="home__aside-content">
               {categories.map((item) => (
-                <Link className="home__aside-item" to={'/'}>
+                <Link className="home__aside-item" to={'/'} key={item}>
                   {item}
                 </Link>
               ))}
@@ -77,6 +77,24 @@ function HomeAside({ categories }) {
 }
 
 function HomeLanding({ articles }) {
+  if (articles.length === 0)
+    return (
+      <div className="home__landing">
+        <div className="home__top-height"></div>
+        <div className="home__landing-empty">
+          <div className="home__landing-text">
+            <h1>No News Yet</h1>
+            <p>
+              It seems we don't have any updates right now. Check back soon for
+              more news!
+            </p>
+          </div>
+          <div className="image-container">
+            <img src={'/assets/images/cloud-computing.png'} alt="leaf" />
+          </div>
+        </div>
+      </div>
+    );
   return (
     <article className="home__landing">
       <div className="home__top-height">
