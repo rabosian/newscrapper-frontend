@@ -6,18 +6,10 @@ const Navbar = ({ user }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // User 기능이 아직 없기 때문에 임시로 만들어 놓음
-  const [tempUser, setTempUser] = useState(false);
-
-  function handleLogout() {
-    setTempUser(false);
-  }
+  function handleLogout() {}
 
   function handleLogin() {
-    setTempUser(true);
-
-    // User 기능이 생기면 사용할 것
-    // navigate('/login', { state: { from: location } });
+    navigate('/login', { state: { from: location } });
   }
 
   return (
@@ -30,7 +22,7 @@ const Navbar = ({ user }) => {
 
       <nav>
         <div className="navbar__content">
-          {tempUser ? (
+          {user ? (
             <>
               <button className="navbar__btn" onClick={handleLogout}>
                 Log Out
