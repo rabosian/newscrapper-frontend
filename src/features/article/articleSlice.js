@@ -6,10 +6,22 @@ import api from '../../utils/api';
 // 2. getArticlesByCategory - 카테고리 선택 시 보여줄 뉴스들
 // 3. saveAndUpdateArticles - 유저의 인터랙션이 있을 시 (댓글/라이크) DB에 저장하고 댓글, 라이크 저장/업데이트
 
+export const getArticles = createAsyncThunk(
+  'articles/getArticles',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/articles');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 const articleSlice = createSlice({
   name: 'articles',
   initialState: {
-    articlesList: [],
+    articleList: [],
     selectedArticle: null,
     totalArticleCount: 0,
     loading: false,
@@ -21,7 +33,22 @@ const articleSlice = createSlice({
       state.error = null;
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getArticles.pending, (state, action) => {
+        state.loading = ture;
+      })
+      .addCase(getArticles.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = '';
+        state.articleList = action.payload.data;
+        state.totalArticleCount = action.payload.totalArticleCount;
+      })
+      .addCase(getArticles.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
 });
 
 export default articleSlice.reducer;
