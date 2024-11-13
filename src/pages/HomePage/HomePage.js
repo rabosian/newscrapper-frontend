@@ -3,8 +3,17 @@ import './home.style.css';
 import { data } from './mockObj';
 import { Link } from 'react-router-dom';
 import { dateFormatter } from '../../utils/dateFormatter';
+import { getArticles } from '../../features/article/articleSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function HomePage() {
+  const dispatch = useDispatch();
+  const articleList = useSelector((state) => state.article.articleList);
+
+  useEffect(() => {
+    dispatch(getArticles());
+  });
+
   // temp data
   if (data.loading) return 'loading...';
 
@@ -12,7 +21,7 @@ function HomePage() {
     <main className="home">
       <HomeAside categories={data.categories} />
       <div className="wrapper">
-        <HomeLanding articles={data.articles} />
+        <HomeLanding articles={articleList} />
       </div>
     </main>
   );
