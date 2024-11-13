@@ -3,10 +3,12 @@
   justify-content: center;
   gap: 2em;
   padding: 1em;
+  padding-top: 4em;
   padding-bottom: 4em;
 }
 .home .wrapper {
   margin: 0;
+  width: 100%;
 }
 .home__top-height {
   height: 5em;
@@ -20,7 +22,7 @@
 }
 .home__aside-sticky {
   position: sticky;
-  top: 2em;
+  top: 5em;
   padding-bottom: 4em;
   height: 100vh;
   overflow-y: auto;
@@ -38,6 +40,7 @@
   flex-direction: column;
   gap: 0.5em;
   align-items: center;
+  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.152);
 }
 .home__aside-profile svg {
   fill: none;
@@ -68,10 +71,11 @@
   display: flex;
   flex-direction: column;
   gap: 3em;
+  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.152);
 }
 .home__aside h3 {
   text-align: center;
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: bold;
 }
 .home__aside-content {
