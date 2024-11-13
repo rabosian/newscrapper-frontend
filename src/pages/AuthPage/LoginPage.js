@@ -8,7 +8,7 @@ const LoginPage = ({ user }) => {
   const navigate = useNavigate();
 
   // 백엔드 로직이 준비가 되면 활성화
-  // const { loading, error } = useSelector((store) => store.loginWithEmail);
+  // const { loading, error } = useSelector((store) => store.user);
 
   useEffect(() => {
     if (user) {
