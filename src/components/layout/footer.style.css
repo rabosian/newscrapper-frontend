@@ -1,0 +1,10 @@
+.footer__container {
+    display:flex;
+    gap:100px;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer__social-buttons {
+
+}

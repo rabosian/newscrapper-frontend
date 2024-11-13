@@ -8,20 +8,22 @@ import FavoritePage from '../pages/FavoritePage/FavoritePage';
 import CategoryPage from '../pages/CategoryPage/CategoryPage';
 import PrivateRoute from './PrivateRoute';
 import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
 
 const AppRouter = () => {
   return (
     <div>
-        <Navbar />
-        <Routes>
+      <Navbar />
+      <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route element={<PrivateRoute />}>
-            <Route path="/myfavorite" element={<FavoritePage />} />
+          <Route path="/myfavorite" element={<FavoritePage />} />
         </Route>
         <Route path="/category" element={<CategoryPage />} />
-        </Routes>
+      </Routes>
+      <Footer />
     </div>
   );
 };
