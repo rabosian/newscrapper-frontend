@@ -9,6 +9,9 @@ body {
   font-weight: 400;
   font-family: var(--font-primary);
 }
+input {
+  font-family: var(--font-primary);
+}
 h1,
 h2,
 h3,
@@ -52,12 +55,12 @@ button {
 
 @media (max-width: 1200px) {
   body {
-    font-size: 0.9rem;
+    /* font-size: 0.9rem; */
   }
 }
 
 @media (max-width: 800px) {
   body {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 }
