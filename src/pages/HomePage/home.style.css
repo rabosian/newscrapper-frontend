@@ -173,9 +173,30 @@
   stroke-width: 1px;
   color: rgb(145, 145, 145);
 }
+.home__landing-empty {
+  width: 100%;
+  margin: auto;
+  min-height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+}
+.home__landing-empty p {
+  font-size: 1.1em;
+}
+.home__landing-empty .image-container {
+  width: 10rem;
+  height: 10rem;
+}
 
 @media (max-width: 920px) {
   .home__aside {
     display: none;
+  }
+}
+@media (max-width: 470px) {
+  .home__landing-empty {
+    flex-direction: column;
   }
 }/*# sourceMappingURL=home.style.css.map */
