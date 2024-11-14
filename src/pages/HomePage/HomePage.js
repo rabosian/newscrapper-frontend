@@ -12,7 +12,7 @@ function HomePage() {
 
   useEffect(() => {
     dispatch(getArticles());
-  });
+  }, []);
 
   // temp data
   if (data.loading) return 'loading...';
