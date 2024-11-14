@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './register.style.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../features/user/userSlice';
 
@@ -9,6 +9,15 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false); // sign-up 버튼 disable
+
+  const { user } = useSelector((store) => store.user);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+      return;
+    }
+  }, [user, navigate]);
 
   // 폼 유효성 체크
   function checkFormValid({ password, confirm, policy }) {
