@@ -20,8 +20,7 @@ const Navbar = () => {
   }, [dispatch]);
 
   function handleLogout() {
-    dispatch(logout());
-    navigate('/');
+    dispatch(logout({ navigate }));
   }
 
   function handleLogin() {

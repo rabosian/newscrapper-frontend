@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 
 // 필요한 API들
-// 1. signup
+// 1. signup      done
 // 2. loginWithEmail
 // 3. loginWithToken
-// 4. googleLogin
-// 5. logout
+// 4. googleLogin done
+// 5. logout      done
 
 // Sign-up
 export const registerUser = createAsyncThunk(
@@ -56,16 +56,31 @@ export const loginWithToken = createAsyncThunk(
   }
 );
 
-// logout
+export const loginWithGoogle = createAsyncThunk(
+  'user/loginWithGoogle',
+  async (credential, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/auth/google', { credential });
+      sessionStorage.setItem('token', response.data.token);
+      return response.data.user;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || error.message || 'Login failed'
+      );
+    }
+  }
+);
+
 export const logout = createAsyncThunk(
   'user/logout',
-  async (_, { dispatch }) => {
+  async ({ navigate }, { rejectWithValue }) => {
     try {
       sessionStorage.removeItem('token');
-
-      return null;
+      navigate('/login');
     } catch (error) {
-      throw error;
+      return rejectWithValue(
+        error.response?.data?.message || error.message || 'Logout failed'
+      );
     }
   }
 );
@@ -112,16 +127,29 @@ const userSlice = createSlice({
       .addCase(loginWithToken.fulfilled, (state, action) => {
         state.user = action.payload.user;
       })
-      .addCase(logout.pending, (state) => {
+      .addCase(loginWithGoogle.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(logout.fulfilled, (state) => {
-        state.user = null;
+      .addCase(loginWithGoogle.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = false;
+        state.user = action.payload;
+        state.error = null;
       })
-      .addCase(logout.rejected, (state) => {
+      .addCase(loginWithGoogle.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(logout.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = null;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

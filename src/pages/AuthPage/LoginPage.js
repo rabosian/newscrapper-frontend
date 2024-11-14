@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import './login.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
+import { loginWithGoogle } from '../../features/user/userSlice';
 import { loginWithEmail } from '../../features/user/userSlice';
 
 const LoginPage = () => {
@@ -30,6 +32,11 @@ const LoginPage = () => {
     // 로그인 로직이 준비가 되면 활성화
     dispatch(loginWithEmail(items));
   }
+  const handleGoogleLogin = async (googleData) => {
+    //login with Google
+    dispatch(loginWithGoogle(googleData.credential));
+    console.log('google', googleData);
+  };
 
   return (
     <main className="login">
@@ -78,8 +85,13 @@ const LoginPage = () => {
         <Link to={'/register'} title="go to register page">
           Don't have an account? Create one here.
         </Link>
+        <GoogleLogin
+          onSuccess={handleGoogleLogin}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
       </div>
-      {/* google login here */}
     </main>
   );
 };
