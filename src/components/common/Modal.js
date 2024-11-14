@@ -5,7 +5,7 @@ import { dateFormatter } from '../../utils/dateFormatter';
 
 const body = document.getElementsByTagName('body')[0];
 
-function Modal({ handleClose, article, modalOn }) {
+function Modal({ handleOpen, article, modalOn }) {
   useEffect(() => {
     if (modalOn) {
       body.style.overflow = 'hidden';
@@ -19,7 +19,7 @@ function Modal({ handleClose, article, modalOn }) {
     <>
       <section className="modal">
         <div className="modal__content">
-          <div className="modal__close" onClick={handleClose}>
+          <div className="modal__close" onClick={() => handleOpen(null)}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -39,7 +39,7 @@ function Modal({ handleClose, article, modalOn }) {
           {/* comments */}
           {/* <div className="modal__comments"></div> */}
         </div>
-        <div className="back-cover" onClick={handleClose}></div>
+        <div className="back-cover" onClick={() => handleOpen(null)}></div>
       </section>
     </>
   );
