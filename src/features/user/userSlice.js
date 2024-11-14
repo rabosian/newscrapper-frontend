@@ -18,12 +18,10 @@ export const registerUser = createAsyncThunk(
 
       navigate('/login');
 
-      // Check if response has the expected structure
       return response.data?.data || response.data;
     } catch (error) {
       console.log('Error:', error.response);
 
-      // Handle error with a more informative message if available
       return rejectWithValue(
         error.response?.data?.message || error.message || 'Registration failed'
       );
