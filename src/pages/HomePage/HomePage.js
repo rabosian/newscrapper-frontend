@@ -10,25 +10,18 @@ import Modal from '../../components/common/Modal';
 function HomePage() {
   const dispatch = useDispatch();
   const articleList = useSelector((state) => state.article.articleList);
-  const [modalOn, setModalOn] = useState(false);
   const [article, setArticle] = useState(null);
+
+  // 나중에 redux로 구현할지 여부 정하기
+  const [modalOn, setModalOn] = useState(false);
 
   useEffect(() => {
     dispatch(getArticles());
   }, []);
 
-  useEffect(() => {
-    console.log(articleList);
-  }, []);
-
   function handleOpen(item) {
-    setModalOn(true);
+    setModalOn((prev) => !prev);
     setArticle(item);
-  }
-
-  function handleClose() {
-    setModalOn(false);
-    setArticle(null);
   }
 
   // temp data
@@ -41,7 +34,7 @@ function HomePage() {
         <HomeLanding articleList={articleList} handleOpen={handleOpen} />
       </div>
       {modalOn && (
-        <Modal handleClose={handleClose} article={article} modalOn={modalOn} />
+        <Modal handleOpen={handleOpen} article={article} modalOn={modalOn} />
       )}
     </main>
   );
@@ -121,6 +114,7 @@ function HomeLanding({ articleList, handleOpen }) {
         <h1>Today Headlines</h1>
       </div>
       <div className="home__landing-grid">
+        {/* when an article is deleted from news api, title gets value with [Removed] */}
         {articleList
           .filter(({ title }) => title !== '[Removed]')
           .map((item) => {
@@ -134,9 +128,13 @@ function HomeLanding({ articleList, handleOpen }) {
 }
 
 function HomeCard({ item, handleOpen }) {
-  const published = dateFormatter(item.publishedAt);
-  // when an article is deleted from news api,
-  // title gets value with [Removed]
+  const [published, setPublished] = useState(null);
+  useEffect(() => {
+    if (item) {
+      const temp = dateFormatter(item.publishedAt);
+      setPublished(temp);
+    }
+  }, [item]);
 
   return (
     <section className="home__landing-card">

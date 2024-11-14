@@ -4,7 +4,6 @@
  * return: string type -> ex: 6 hours ago
  */
 export function dateFormatter(publishedAt) {
-  console.log(publishedAt);
   const prev = new Date(publishedAt);
   const now = new Date();
   const timeDifference = now - prev;
@@ -13,9 +12,19 @@ export function dateFormatter(publishedAt) {
   const h = Math.floor(timeDifference / (1000 * 60 * 60));
   const d = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
+  // adding letter s at the end of the time
+  let letter = 's';
+
   if (!d) {
-    return !h ? `${m} minutes ago` : `${h} hours ago`;
+    if (!h) {
+      if (m === 1) letter = '';
+      return `${m} minute${letter} ago`;
+    } else {
+      if (h === 1) letter = '';
+      return `${h} hour${letter} ago`;
+    }
   }
 
-  return `${d} days ago`;
+  if (d === 1) letter = '';
+  return `${d} day${letter} ago`;
 }
