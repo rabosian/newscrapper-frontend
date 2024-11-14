@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './navbar.style.css';
+import { logout } from '../../features/user/userSlice';
+import { useDispatch } from 'react-redux';
 
 const Navbar = ({ user }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
-  function handleLogout() {}
+  function handleLogout() {
+    dispatch(logout({ navigate }));
+  }
 
   function handleLogin() {
     navigate('/login', { state: { from: location } });

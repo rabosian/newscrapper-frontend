@@ -9,15 +9,17 @@ import CategoryPage from '../pages/CategoryPage/CategoryPage';
 import PrivateRoute from './PrivateRoute';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import { useSelector } from 'react-redux';
 
 const AppRouter = () => {
+  const { user } = useSelector((state) => state.user);
   return (
     <div>
-      <Navbar />
+      <Navbar user={user} />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage user={user} />} />
         <Route element={<PrivateRoute />}>
           <Route path="/myfavorite" element={<FavoritePage />} />
         </Route>
