@@ -46,9 +46,9 @@ const RegisterPage = () => {
     try {
       await dispatch(
         registerUser({
-          email,
-          name,
-          password,
+          email: email.value,
+          name: name.value,
+          password: password.value,
           navigate,
         })
       ).unwrap();
