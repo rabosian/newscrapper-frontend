@@ -17,10 +17,16 @@ export const registerUser = createAsyncThunk(
       window.alert('Congratulations on signing up!');
 
       navigate('/login');
-      return response.data.data;
+
+      // Check if response has the expected structure
+      return response.data?.data || response.data;
     } catch (error) {
       console.log('Error:', error.response);
-      return rejectWithValue(error.message);
+
+      // Handle error with a more informative message if available
+      return rejectWithValue(
+        error.response?.data?.message || error.message || 'Registration failed'
+      );
     }
   }
 );
