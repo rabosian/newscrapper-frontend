@@ -4,6 +4,7 @@
  * return: string type -> ex: 6 hours ago
  */
 export function dateFormatter(publishedAt) {
+  console.log(publishedAt);
   const prev = new Date(publishedAt);
   const now = new Date();
   const timeDifference = now - prev;
