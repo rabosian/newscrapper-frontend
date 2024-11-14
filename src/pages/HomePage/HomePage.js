@@ -1,18 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './home.style.css';
 import { data } from './mockObj';
 import { Link } from 'react-router-dom';
 import { dateFormatter } from '../../utils/dateFormatter';
 import { getArticles } from '../../features/article/articleSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import Modal from '../../components/common/Modal';
 
 function HomePage() {
   const dispatch = useDispatch();
   const articleList = useSelector((state) => state.article.articleList);
+  const [article, setArticle] = useState(null);
+
+  // 나중에 redux로 구현할지 여부 정하기
+  const [modalOn, setModalOn] = useState(false);
 
   useEffect(() => {
     dispatch(getArticles());
   }, []);
+
+  function handleOpen(item) {
+    setModalOn((prev) => !prev);
+    setArticle(item);
+  }
 
   // temp data
   if (data.loading) return 'loading...';
@@ -21,8 +31,11 @@ function HomePage() {
     <main className="home">
       <HomeAside categories={data.categories} />
       <div className="wrapper">
-        <HomeLanding articles={articleList} />
+        <HomeLanding articleList={articleList} handleOpen={handleOpen} />
       </div>
+      {modalOn && (
+        <Modal handleOpen={handleOpen} article={article} modalOn={modalOn} />
+      )}
     </main>
   );
 }
@@ -76,8 +89,8 @@ function HomeAside({ categories }) {
   );
 }
 
-function HomeLanding({ articles }) {
-  if (articles.length === 0)
+function HomeLanding({ articleList, handleOpen }) {
+  if (articleList.length === 0)
     return (
       <div className="home__landing">
         <div className="home__top-height"></div>
@@ -101,43 +114,46 @@ function HomeLanding({ articles }) {
         <h1>Today Headlines</h1>
       </div>
       <div className="home__landing-grid">
-        {articles
+        {/* when an article is deleted from news api, title gets value with [Removed] */}
+        {articleList
           .filter(({ title }) => title !== '[Removed]')
           .map((item) => {
-            return <HomeCard {...item} key={item.url} />;
+            return (
+              <HomeCard item={item} key={item.url} handleOpen={handleOpen} />
+            );
           })}
       </div>
     </article>
   );
 }
 
-function HomeCard({ url, title, description, urlToImage, publishedAt }) {
-  const published = dateFormatter(publishedAt);
-  // when an article is deleted from news api,
-  // title gets value with [Removed]
+function HomeCard({ item, handleOpen }) {
+  const [published, setPublished] = useState(null);
+  useEffect(() => {
+    if (item) {
+      const temp = dateFormatter(item.publishedAt);
+      setPublished(temp);
+    }
+  }, [item]);
 
   return (
     <section className="home__landing-card">
-      <div className="image-container">
-        <Link to={url}>
-          {urlToImage ? (
-            <img src={urlToImage} alt={title} />
-          ) : (
-            <div className="no-image"></div>
-          )}
-        </Link>
+      <div className="image-container" onClick={() => handleOpen(item)}>
+        {item.urlToImage ? (
+          <img src={item.urlToImage} alt={item.title} />
+        ) : (
+          <div className="no-image"></div>
+        )}
       </div>
       <div className="home__landing-content">
-        <Link to={url}>
-          <div className="home__landing-text">
-            <h2>{title}</h2>
-            <p>{description}</p>
-          </div>
-        </Link>
+        <div className="home__landing-text" onClick={() => handleOpen(item)}>
+          <h2>{item.title}</h2>
+          <p>{item.source.name}</p>
+        </div>
         <div className="home__landing-details">
           <div className="home__landing-date">{published}</div>
           <div className="home__landing-stats">
-            <button>
+            <button onClick={() => handleOpen(item)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -151,7 +167,7 @@ function HomeCard({ url, title, description, urlToImage, publishedAt }) {
               </svg>
               {Math.floor(Math.random() * 1000) + 100}
             </button>
-            <button>
+            <button onClick={() => handleOpen(item)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -167,7 +183,7 @@ function HomeCard({ url, title, description, urlToImage, publishedAt }) {
               </svg>
               {Math.floor(Math.random() * 100)}
             </button>
-            <button>
+            <button onClick={() => handleOpen(item)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

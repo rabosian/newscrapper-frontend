@@ -29,6 +29,33 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+// Login with Email
+export const loginWithEmail = createAsyncThunk(
+  'user/loginWithEmail',
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/auth/login', { email, password });
+      sessionStorage.setItem('token', response.data.token);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+// login with token
+export const loginWithToken = createAsyncThunk(
+  'user/loginWithToken',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get('/user/me');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 export const loginWithGoogle = createAsyncThunk(
   'user/loginWithGoogle',
   async (credential, { rejectWithValue }) => {
@@ -84,6 +111,32 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.error = action.payload;
+      })
+      .addCase(loginWithEmail.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(loginWithEmail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.loginError = null;
+      })
+      .addCase(loginWithEmail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(loginWithToken.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+      })
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.user = null;
+        state.loading = false;
+        state.success = false;
+      })
+      .addCase(logout.rejected, (state) => {
+        state.loading = false;
       })
       .addCase(loginWithGoogle.pending, (state, action) => {
         state.loading = true;
