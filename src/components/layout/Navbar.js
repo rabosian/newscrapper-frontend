@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './navbar.style.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginWithToken, logout } from '../../features/user/userSlice';
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
-  function handleLogout() {}
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    // 세션스토리지에 토큰이 있을 때만 실행
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      dispatch(loginWithToken());
+    }
+  }, [dispatch]);
+
+  function handleLogout() {
+    dispatch(logout());
+    navigate('/');
+  }
 
   function handleLogin() {
     navigate('/login', { state: { from: location } });
@@ -16,7 +32,7 @@ const Navbar = ({ user }) => {
     <header className="navbar">
       <Link to="/" className="navbar__logo">
         <div className="image-container">
-          <img src="/assets/images/lowdown-logo.png" />
+          <img src="/assets/images/lowdown-logo.png" alt="logo-image" />
         </div>
       </Link>
 

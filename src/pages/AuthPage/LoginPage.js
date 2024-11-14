@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './login.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { loginWithEmail } from '../../features/user/userSlice';
 
-const LoginPage = ({ user }) => {
+const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // 백엔드 로직이 준비가 되면 활성화
-  // const { loading, error } = useSelector((store) => store.user);
+  const { user, loading, error } = useSelector((store) => store.user);
 
   useEffect(() => {
     if (user) {
       navigate('/');
       return;
     }
-  }, [user]);
+  }, [user, navigate]);
 
   function handleCancel() {
     navigate('/');
@@ -23,11 +24,11 @@ const LoginPage = ({ user }) => {
 
   function submitHandle(e) {
     e.preventDefault();
-    const [id, password] = e.target;
-    const items = { id: id.value, password: password.value };
+    const [email, password] = e.target;
+    const items = { email: email.value, password: password.value };
 
     // 로그인 로직이 준비가 되면 활성화
-    // dispatch(loginWithEmail(items));
+    dispatch(loginWithEmail(items));
   }
 
   return (
@@ -69,7 +70,11 @@ const LoginPage = ({ user }) => {
           </div>
         </form>
         {/* 백엔드 로직이 준비 되면 활성화 */}
-        {/* {error && <div className="login__error">{error.message}</div>} */}
+        {error && (
+          <div className="login__error">
+            {error.message || error.toString()}
+          </div>
+        )}
         <Link to={'/register'} title="go to register page">
           Don't have an account? Create one here.
         </Link>
