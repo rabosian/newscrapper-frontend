@@ -1,0 +1,21 @@
+.article {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    height: 5em;
+    display: flex;
+    align-items: center;
+  }
+
+  h1 {
+    font-weight: bolder;
+    font-size: 1.6em;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2em;
+  }
+}

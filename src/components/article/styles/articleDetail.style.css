@@ -1,4 +1,4 @@
-.modal {
+.article__detail {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -10,14 +10,13 @@
   padding: 0.75em;
   z-index: 999;
 }
-.modal__content {
+.article__detail-content {
   display: flex;
   max-width: 40em;
   max-height: -moz-fit-content;
   max-height: fit-content;
   width: 100%;
   height: auto;
-  padding: 1em;
   overflow-y: auto;
   height: 100%;
   background-color: var(--clr-bg-lgt);
@@ -30,120 +29,121 @@
   scrollbar-width: thin;
   scrollbar-color: var(--clr-highlight) var(--clr-bg-lgt);
 }
-.modal__content::-webkit-scrollbar {
+.article__detail-content::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
-.modal__content::-webkit-scrollbar-thumb {
+.article__detail-content::-webkit-scrollbar-thumb {
   background: var(--clr-highlight);
 }
-.modal__close {
+.article__detail-close {
   position: absolute;
   right: -0.1rem;
   top: -0.1rem;
   width: 4em;
-  background-color: #454954;
+  background-color: #1f232d;
   padding: 0.25em;
   cursor: pointer;
   z-index: 9;
   display: flex;
   border-bottom-left-radius: 8px;
 }
-.modal__close:hover {
-  background-color: #191c24;
+.article__detail-close:hover {
+  background-color: #010101;
 }
-.modal__close svg {
+.article__detail-close svg {
   margin: auto;
   color: #fff;
   stroke-width: 1px;
 }
-.modal .line {
+.article__detail .line {
   width: 100%;
   height: 0.1rem;
   background-color: rgb(227, 227, 227);
   margin: 1em 0;
 }
-.modal span {
+.article__detail span {
   color: var(--clr-font-drk);
   font-weight: bold;
 }
-
-/* ------------ Description starts here ------------ */
-.modal__desc {
+.article__detail-desc {
   display: flex;
   flex-direction: column;
   gap: 1em;
 }
-.modal__desc .image-container {
+.article__detail .image-container {
   width: 100%;
   aspect-ratio: 3/2;
-  border-radius: 4px;
   overflow: hidden;
 }
-.modal__desc-info {
+.article__detail-info {
   display: flex;
   flex-direction: column;
   gap: 1em;
 }
-.modal__desc-header {
+.article__detail-header {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
 }
-.modal__desc-header h3 {
+.article__detail-header h3 {
   color: var(--clr-font-drk);
   font-weight: bold;
+  padding: 0 0.75em;
 }
-.modal__desc-header p {
+.article__detail-header p {
   color: var(--clr-font);
   display: flex;
   flex-direction: column;
+  padding: 0 0.75em;
 }
-.modal__desc-source {
+.article__detail-source {
   color: var(--clr-font-lgt);
 }
-.modal__desc-from {
+.article__detail-from {
   text-align: right;
 }
-.modal__desc-link {
+.article__detail-link {
   display: flex;
   flex-direction: column;
+  padding: 0 0.75em;
 }
-.modal__desc-link a {
+.article__detail-link a {
   color: var(--clr-font-link);
   margin-right: auto;
   text-decoration: underline;
 }
-.modal__desc-details {
+.article__detail-details {
   display: flex;
   justify-content: space-between;
   color: var(--clr-font);
+  padding: 0 0.75em;
 }
-.modal__desc-stats {
+.article__detail-stats {
   display: flex;
   gap: 1em;
 }
-.modal__desc-stats svg {
+.article__detail-stats svg {
   color: var(--clr-font-lgt);
   fill: none;
 }
-.modal__desc-stats button {
+.article__detail-stats button {
   display: flex;
   gap: 0.25em;
   align-items: center;
   color: var(--clr-font-drk);
   font-weight: bold;
 }
-.modal__desc-stats button:nth-child(1) {
+.article__detail-stats button:nth-child(1) {
   cursor: auto;
 }
-.modal__desc-stats button:nth-child(1) svg {
+.article__detail-stats button:nth-child(1) svg {
   color: var(--clr-font);
 }
-.modal__desc-stats button:not(:nth-of-type(1)):hover svg {
+.article__detail-stats button:not(:nth-of-type(1)):hover svg {
   color: var(--clr-font);
 }
-.modal__desc-date {
+.article__detail-date {
   color: var(--clr-font-lgt);
 }
 
@@ -160,4 +160,4 @@
           backdrop-filter: blur(1px);
   cursor: pointer;
   z-index: -1;
-}/*# sourceMappingURL=modal.style.css.map */
+}/*# sourceMappingURL=articleDetail.style.css.map */
