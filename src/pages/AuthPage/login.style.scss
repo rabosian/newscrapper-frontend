@@ -8,14 +8,6 @@
   h1 {
     font-size: 1.6em;
     font-weight: bold;
-    margin-bottom: 1em;
-    text-align: center;
-  }
-
-  a {
-    color: var(--clr-font-link);
-    font-size: 0.9em;
-    margin-right: auto;
   }
 
   &__content {
@@ -30,6 +22,11 @@
     display: flex;
     flex-direction: column;
     gap: 1em;
+
+    > p {
+      font-size: 0.85em;
+      color: var(--clr-font-lgt);
+    }
   }
 
   &__form {
@@ -41,24 +38,31 @@
   label {
     display: flex;
     flex-direction: column;
-    gap: 0.5em;
     color: var(--clr-font);
     font-weight: bold;
-  }
+    padding: 0.25rem 0.5rem;
 
-  input {
-    border: 1px solid #dadada;
-    padding: 0.5em 0;
-    outline: none;
-    font-size: 1em;
-    border: none;
-    border-bottom: 1px solid #b1b1b1;
+    input {
+      border: 1px solid #dadada;
+      padding: 0.5em 0;
+      outline: none;
+      font-size: 1em;
+      border: none;
+      border-bottom: 1px solid rgb(194, 194, 194);
+      background-color: transparent;
 
-    &::placeholder {
-      color: #b4b4b4;
+      &::placeholder {
+        color: #dbdbdb;
+      }
     }
-    &:focus {
-      border-bottom: 1px solid black;
+
+    &:focus-within {
+      outline: 1px solid #dadada;
+      background-color: #fbfbff;
+      color: var(--clr-highlight);
+      input {
+        border-bottom: 1px solid black;
+      }
     }
   }
 
@@ -69,7 +73,7 @@
   }
 
   button {
-    padding: 0.6em 1em;
+    height: 50px;
     border-radius: 4px;
     font-size: 1em;
     width: 100%;
@@ -99,10 +103,62 @@
     color: red;
     font-size: 0.9em;
   }
+
+  &__link {
+    color: var(--clr-font-lgt);
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: auto;
+
+    a {
+      color: var(--clr-font-link);
+      font-size: 0.9rem;
+      margin-right: auto;
+      text-decoration: underline;
+    }
+  }
+}
+
+// ------------ other login method styling ------------- //
+.login__party {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  &-text {
+    width: 100%;
+    height: 2rem;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+
+  &-signup {
+    padding: 0.25rem 1rem;
+    background-color: #fff;
+    position: relative;
+    z-index: 2;
+    color: #a1a1a1;
+  }
+
+  &-line {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #d2d2d2;
+    left: 0;
+  }
+}
+
+.google__btn > div {
+  width: 100% !important;
 }
 
 @media (max-width: 420px) {
   .login__content {
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
   }
 }

@@ -72,7 +72,6 @@ const RegisterPage = () => {
     <div className="register">
       <div className="register__box">
         <h1 className="register__title">Sign-up</h1>
-
         <form className="register__form" onSubmit={handleSubmit}>
           <label>
             Name
@@ -118,10 +117,10 @@ const RegisterPage = () => {
             />
           </label>
 
-          <div className="register__form-group register__policy-container">
-            <input type="checkbox" id="policy" name="policy" />
-            <label htmlFor="policy">I agree to the Terms and Conditions</label>
-          </div>
+          <label className="register__policy">
+            <input type="checkbox" id="policy" name="policy" />I agree to the
+            Terms and Conditions
+          </label>
 
           {/* 회원가입 실패시 */}
           {error && <div className="register__error">{error}</div>}
@@ -130,9 +129,12 @@ const RegisterPage = () => {
             {isSubmitting ? 'Signing up ...' : 'Register'}
           </button>
         </form>
-        <Link to={'/login'} title="go to login page">
-          Already have an account? Log in here.
-        </Link>
+        <div className="register__link">
+          Already have an account?{' '}
+          <Link to={'/login'} title="go to login page">
+            Sign in
+          </Link>
+        </div>
       </div>
     </div>
   );

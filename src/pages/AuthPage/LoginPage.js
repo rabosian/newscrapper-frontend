@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import './login.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { loginWithGoogle } from '../../features/user/userSlice';
 import { loginWithEmail } from '../../features/user/userSlice';
+import GoogleButton from 'react-google-button';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -20,10 +21,6 @@ const LoginPage = () => {
     }
   }, [user, navigate]);
 
-  function handleCancel() {
-    navigate('/');
-  }
-
   function submitHandle(e) {
     e.preventDefault();
     const [email, password] = e.target;
@@ -38,10 +35,16 @@ const LoginPage = () => {
     console.log('google', googleData);
   };
 
+  const login = useGoogleLogin({
+    onSuccess: handleGoogleLogin,
+    onError: () => console.log('Login Failed'),
+  });
+
   return (
     <main className="login">
       <div className="login__content">
-        <h1>Log-in</h1>
+        <h1>Welcome back</h1>
+        <p>Please enter your details</p>
         <form className="login__form" onSubmit={submitHandle}>
           <label>
             Email{' '}
@@ -65,14 +68,7 @@ const LoginPage = () => {
           </label>
           <div className="login__btn-box">
             <button className="login__btn-submit" type="submit">
-              Login
-            </button>
-            <button
-              className="login__btn-cancel"
-              type="button"
-              onClick={handleCancel}
-            >
-              Cancel
+              Sign in
             </button>
           </div>
         </form>
@@ -82,15 +78,30 @@ const LoginPage = () => {
             {error.message || error.toString()}
           </div>
         )}
-        <Link to={'/register'} title="go to register page">
-          Don't have an account? Create one here.
-        </Link>
-        <GoogleLogin
-          onSuccess={handleGoogleLogin}
-          onError={() => {
-            console.log('Login Failed');
-          }}
-        />
+        <div className="login__party">
+          <div className="login__party-text">
+            <div className="login__party-signup">or sign up with</div>
+            <div className="login__party-line"></div>
+          </div>
+
+          <div className="google__btn">
+            <GoogleButton onClick={login} label="Sign in with Google" />
+          </div>
+          {/* 구글 로그인 문제 발생시에 밑에 것을 사용 */}
+          {/* <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+          /> */}
+        </div>
+
+        <div className="login__link">
+          Don't have an account?{' '}
+          <Link to={'/register'} title="go to register page">
+            Sign up
+          </Link>
+        </div>
       </div>
     </main>
   );

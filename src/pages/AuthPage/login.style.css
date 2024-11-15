@@ -8,13 +8,6 @@
 .login h1 {
   font-size: 1.6em;
   font-weight: bold;
-  margin-bottom: 1em;
-  text-align: center;
-}
-.login a {
-  color: var(--clr-font-link);
-  font-size: 0.9em;
-  margin-right: auto;
 }
 .login__content {
   position: sticky;
@@ -29,6 +22,10 @@
   flex-direction: column;
   gap: 1em;
 }
+.login__content > p {
+  font-size: 0.85em;
+  color: var(--clr-font-lgt);
+}
 .login__form {
   display: flex;
   flex-direction: column;
@@ -37,25 +34,31 @@
 .login label {
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
   color: var(--clr-font);
   font-weight: bold;
+  padding: 0.25rem 0.5rem;
 }
-.login input {
+.login label input {
   border: 1px solid #dadada;
   padding: 0.5em 0;
   outline: none;
   font-size: 1em;
   border: none;
-  border-bottom: 1px solid #b1b1b1;
+  border-bottom: 1px solid rgb(194, 194, 194);
+  background-color: transparent;
 }
-.login input::-moz-placeholder {
-  color: #b4b4b4;
+.login label input::-moz-placeholder {
+  color: #dbdbdb;
 }
-.login input::placeholder {
-  color: #b4b4b4;
+.login label input::placeholder {
+  color: #dbdbdb;
 }
-.login input:focus {
+.login label:focus-within {
+  outline: 1px solid #dadada;
+  background-color: #fbfbff;
+  color: var(--clr-highlight);
+}
+.login label:focus-within input {
   border-bottom: 1px solid black;
 }
 .login__btn-box {
@@ -64,7 +67,7 @@
   justify-content: center;
 }
 .login button {
-  padding: 0.6em 1em;
+  height: 50px;
   border-radius: 4px;
   font-size: 1em;
   width: 100%;
@@ -90,9 +93,55 @@
   color: red;
   font-size: 0.9em;
 }
+.login__link {
+  color: var(--clr-font-lgt);
+  font-size: 0.85em;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: auto;
+}
+.login__link a {
+  color: var(--clr-font-link);
+  font-size: 0.9rem;
+  margin-right: auto;
+  text-decoration: underline;
+}
+
+.login__party {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.login__party-text {
+  width: 100%;
+  height: 2rem;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.login__party-signup {
+  padding: 0.25rem 1rem;
+  background-color: #fff;
+  position: relative;
+  z-index: 2;
+  color: #a1a1a1;
+}
+.login__party-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: #d2d2d2;
+  left: 0;
+}
+
+.google__btn > div {
+  width: 100% !important;
+}
 
 @media (max-width: 420px) {
   .login__content {
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
   }
 }/*# sourceMappingURL=login.style.css.map */
