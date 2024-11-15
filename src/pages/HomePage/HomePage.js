@@ -1,41 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './home.style.css';
 import { data } from './mockObj';
 import { Link } from 'react-router-dom';
-import { dateFormatter } from '../../utils/dateFormatter';
-import { getArticles } from '../../features/article/articleSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import Modal from '../../components/common/Modal';
+import ArticleGrid from '../../components/article/ArticleGrid';
 
 function HomePage() {
-  const dispatch = useDispatch();
-  const articleList = useSelector((state) => state.article.articleList);
-  const [article, setArticle] = useState(null);
-
-  // 나중에 redux로 구현할지 여부 정하기
-  const [modalOn, setModalOn] = useState(false);
-
-  useEffect(() => {
-    dispatch(getArticles());
-  }, []);
-
-  function handleOpen(item) {
-    setModalOn((prev) => !prev);
-    setArticle(item);
-  }
-
-  // temp data
-  if (data.loading) return 'loading...';
-
   return (
     <main className="home">
       <HomeAside categories={data.categories} />
       <div className="wrapper">
-        <HomeLanding articleList={articleList} handleOpen={handleOpen} />
+        <ArticleGrid />
       </div>
-      {modalOn && (
-        <Modal handleOpen={handleOpen} article={article} modalOn={modalOn} />
-      )}
     </main>
   );
 }
@@ -86,120 +61,6 @@ function HomeAside({ categories }) {
         </div>
       </div>
     </aside>
-  );
-}
-
-function HomeLanding({ articleList, handleOpen }) {
-  if (articleList.length === 0)
-    return (
-      <div className="home__landing">
-        <div className="home__top-height"></div>
-        <div className="home__landing-empty">
-          <div className="home__landing-text">
-            <h1>No News Yet</h1>
-            <p>
-              It seems we don't have any updates right now. Check back soon for
-              more news!
-            </p>
-          </div>
-          <div className="image-container">
-            <img src={'/assets/images/cloud-computing.png'} alt="leaf" />
-          </div>
-        </div>
-      </div>
-    );
-  return (
-    <article className="home__landing">
-      <div className="home__top-height">
-        <h1>Today Headlines</h1>
-      </div>
-      <div className="home__landing-grid">
-        {/* when an article is deleted from news api, title gets value with [Removed] */}
-        {articleList
-          .filter(({ title }) => title !== '[Removed]')
-          .map((item) => {
-            return (
-              <HomeCard item={item} key={item.url} handleOpen={handleOpen} />
-            );
-          })}
-      </div>
-    </article>
-  );
-}
-
-function HomeCard({ item, handleOpen }) {
-  const [published, setPublished] = useState(null);
-  useEffect(() => {
-    if (item) {
-      const temp = dateFormatter(item.publishedAt);
-      setPublished(temp);
-    }
-  }, [item]);
-
-  return (
-    <section className="home__landing-card">
-      <div className="image-container" onClick={() => handleOpen(item)}>
-        {item.urlToImage ? (
-          <img src={item.urlToImage} alt={item.title} />
-        ) : (
-          <div className="no-image"></div>
-        )}
-      </div>
-      <div className="home__landing-content">
-        <div className="home__landing-text" onClick={() => handleOpen(item)}>
-          <h2>{item.title}</h2>
-          <p>{item.source.name}</p>
-        </div>
-        <div className="home__landing-details">
-          <div className="home__landing-date">{published}</div>
-          <div className="home__landing-stats">
-            <button onClick={() => handleOpen(item)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-              </svg>
-              {Math.floor(Math.random() * 1000) + 100}
-            </button>
-            <button onClick={() => handleOpen(item)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M12 11v.01" />
-                <path d="M8 11v.01" />
-                <path d="M16 11v.01" />
-                <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3z" />
-              </svg>
-              {Math.floor(Math.random() * 100)}
-            </button>
-            <button onClick={() => handleOpen(item)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M13 4v4c-6.575 1.028 -9.02 6.788 -10 12c-.037 .206 5.384 -5.962 10 -6v4l8 -7l-8 -7z" />
-              </svg>
-              {Math.floor(Math.random() * 20)}
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 

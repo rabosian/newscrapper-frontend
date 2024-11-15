@@ -1,0 +1,38 @@
+.empty {
+  width: 100%;
+  margin: auto;
+  min-height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  h1 {
+    font-weight: bolder;
+    font-size: 1.6em;
+    color: var(--clr-font-drk);
+  }
+
+  p {
+    font-size: 1.1em;
+    color: var(--clr-font);
+  }
+
+  .image-container {
+    width: 10rem;
+    height: 10rem;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 470px) {
+  .empty {
+    flex-direction: column;
+  }
+}

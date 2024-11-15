@@ -1,0 +1,72 @@
+.article__card {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.article__card-text:hover h2,
+.article__card .image-container:hover ~ .card-content h2 {
+  text-decoration: underline;
+}
+.article__card h2 {
+  color: var(--clr-font);
+  font-weight: bold;
+}
+.article__card p {
+  color: var(--clr-font-md);
+}
+.article__card .image-container {
+  aspect-ratio: 3/2;
+  width: 100%;
+  border-radius: 1em;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.article__card .no-image {
+  width: 100%;
+  aspect-ratio: 3/2;
+  background-color: #393882;
+}
+.article__card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  height: 100%;
+}
+.article__card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  cursor: pointer;
+}
+.article__card-details {
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+.article__card-date {
+  display: flex;
+  align-items: center;
+  color: var(--clr-font);
+}
+.article__card-stats {
+  display: flex;
+  gap: 0.5em;
+}
+.article__card-stats button {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: bold;
+  color: var(--clr-font);
+}
+.article__card-stats button:hover svg {
+  color: var(--clr-font);
+}
+.article__card-stats svg {
+  fill: none;
+  stroke-width: 1px;
+  color: var(--clr-font-lgt);
+}/*# sourceMappingURL=articleCard.style.css.map */

@@ -1,0 +1,34 @@
+.empty {
+  width: 100%;
+  margin: auto;
+  min-height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+}
+.empty__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.empty h1 {
+  font-weight: bolder;
+  font-size: 1.6em;
+  color: var(--clr-font-drk);
+}
+.empty p {
+  font-size: 1.1em;
+  color: var(--clr-font);
+}
+.empty .image-container {
+  width: 10rem;
+  height: 10rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 470px) {
+  .empty {
+    flex-direction: column;
+  }
+}/*# sourceMappingURL=emptyitem.style.css.map */
