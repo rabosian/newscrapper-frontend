@@ -15,13 +15,9 @@ export const registerUser = createAsyncThunk(
     try {
       const response = await api.post('/user', { email, name, password });
       window.alert('Congratulations on signing up!');
-
       navigate('/login');
-
       return response.data?.data || response.data;
     } catch (error) {
-      console.log('Error:', error.response);
-
       return rejectWithValue(
         error.response?.data?.message || error.message || 'Registration failed'
       );
@@ -106,10 +102,10 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
-        state.success = true;
+        state.success = true; // 회원가입 성공 여부만 업데이트
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false; // 로딩 상태 초기화
         state.error = action.payload;
       })
       .addCase(loginWithEmail.pending, (state) => {
