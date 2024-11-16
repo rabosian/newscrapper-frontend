@@ -33,6 +33,9 @@ button {
   cursor: pointer;
   font-family: var(--font-primary);
 }
+textarea {
+  font-family: var(--font-primary);
+}
 
 /* max-width wrapper */
 .wrapper {

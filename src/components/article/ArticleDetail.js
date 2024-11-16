@@ -1,14 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './styles/articleDetail.style.css';
 import { dateFormatter } from '../../utils/dateFormatter';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setClearSelectedArticle } from '../../features/article/articleSlice';
+import ArticleComment from './ArticleComment';
 
 const body = document.getElementsByTagName('body')[0];
 
 function ArticleDetail({ article }) {
   const dispatch = useDispatch();
+  const commentRef = useRef();
+  const [commentOn, setCommentOn] = useState(false);
+
+  // 임시 코멘트 -> redux에서 list로 값 가져올 것
+  const [tempComments, setTempComments] = useState([]);
+
   useEffect(() => {
     if (article) {
       body.style.overflow = 'hidden';
@@ -19,33 +26,68 @@ function ArticleDetail({ article }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (commentOn) {
+      commentRef.current.scrollIntoView({
+        behavior: 'smooth', // 부드럽게 스크롤
+        block: 'start', // 요소가 화면 상단에 오도록
+      });
+    }
+  }, [commentOn]);
+
+  // useEffect(() => {
+  //   console.log(commentRef);
+  // }, [commentRef.current]);
+
   function handleClose() {
     dispatch(setClearSelectedArticle());
+  }
+
+  function handleClickComment() {
+    setCommentOn((prev) => !prev);
   }
 
   return (
     <>
       <section className="article__detail">
-        <div className="article__detail-content">
-          <div className="article__detail-close" onClick={handleClose}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        <div
+          className={`article__detail-content ${
+            commentOn && 'article__detail-content--active'
+          }`}
+        >
+          <div className="article__detail-group">
+            <div className="article__detail-close" onClick={handleClose}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M18 6l-12 12" />
+                <path d="M6 6l12 12" />
+              </svg>
+            </div>
+            <ArticleStats {...article} />
+            <div
+              className={`article__detail-comment ${
+                commentOn && 'article__detail-comment--active'
+              }`}
             >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M18 6l-12 12" />
-              <path d="M6 6l12 12" />
-            </svg>
+              <button onClick={handleClickComment}>Comment</button>
+            </div>
           </div>
-          <ArticleStats {...article} />
-          {/* comments */}
-          {/* <div className="article__detail-comments"></div> */}
+          {commentOn && (
+            <ArticleComment
+              commentRef={commentRef}
+              tempComments={tempComments}
+              setTempComments={setTempComments}
+            />
+          )}
         </div>
         <div className="back-cover" onClick={handleClose}></div>
       </section>
@@ -57,7 +99,7 @@ function ArticleStats({
   url,
   title,
   source,
-  description,
+  summary,
   urlToImage,
   publishedAt,
 }) {
@@ -77,7 +119,7 @@ function ArticleStats({
           <div className="line"></div>
           <p>
             <span>About:</span>
-            {description}
+            {summary}
           </p>
         </header>
         {/* Link */}
