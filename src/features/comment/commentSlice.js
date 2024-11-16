@@ -10,8 +10,8 @@ export const getComments = createAsyncThunk(
   'comments/getComments',
   async (articleId, { rejectWithValue }) => {
     try {
-      const response = await api.get('/comments', { articleId });
-      console.log(response.data);
+      // GET에서 body를 지원하지 않기 때문에 query로 보냄.
+      const response = await api.get('/comments', { params: { articleId } });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);
@@ -21,10 +21,9 @@ export const getComments = createAsyncThunk(
 
 export const createComment = createAsyncThunk(
   'comments/createComment',
-  async (articleId, contents, { dispatch, rejectWithValue }) => {
+  async ({ articleId, contents }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post('/comments', { articleId, contents });
-      console.log(response.data);
       dispatch(getComments(articleId));
       return response.data;
     } catch (error) {
