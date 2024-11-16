@@ -12,29 +12,42 @@
 }
 .article__detail-content {
   display: flex;
-  max-width: 40em;
-  max-height: -moz-fit-content;
-  max-height: fit-content;
+  max-width: 40rem;
+  max-height: 50rem;
   width: 100%;
-  height: auto;
-  overflow-y: auto;
   height: 100%;
   background-color: var(--clr-bg-lgt);
   border-radius: 4px;
   overflow-y: auto;
   position: relative;
-  flex-direction: column;
-  gap: 1em;
   overflow-x: hidden;
   scrollbar-width: thin;
-  scrollbar-color: var(--clr-highlight) var(--clr-bg-lgt);
+  scrollbar-color: varvar(--clr-bg-lgt) var(--clr-bg-lgt);
 }
 .article__detail-content::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
 .article__detail-content::-webkit-scrollbar-thumb {
-  background: var(--clr-highlight);
+  background: var(--clr-bg-lgt);
+}
+.article__detail-content--active {
+  max-width: 80rem;
+}
+.article__detail-content--active .article__detail-group {
+  border-right: 1px solid #e3e3e3;
+}
+.article__detail-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 50%;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.article__detail-group::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
 }
 .article__detail-close {
   position: absolute;
@@ -59,7 +72,7 @@
 .article__detail .line {
   width: 100%;
   height: 0.1rem;
-  background-color: rgb(227, 227, 227);
+  background-color: #e3e3e3;
   margin: 1em 0;
 }
 .article__detail span {
@@ -101,7 +114,7 @@
   color: var(--clr-font-lgt);
 }
 .article__detail-from {
-  text-align: right;
+  padding: 0 0.75em;
 }
 .article__detail-link {
   display: flex;
@@ -146,6 +159,23 @@
 .article__detail-date {
   color: var(--clr-font-lgt);
 }
+.article__detail-comment {
+  display: flex;
+  justify-content: center;
+  padding: 0.75em;
+  margin-top: auto;
+}
+.article__detail-comment button {
+  padding: 0.5em;
+  width: 100%;
+  border: 1px solid #afafaf;
+  color: var(--clr-font);
+  font-size: 1em;
+}
+.article__detail-comment--active button {
+  color: #fff;
+  background-color: var(--clr-highlight);
+}
 
 /* ------------ Behind modal color ----------- */
 .back-cover {
@@ -160,4 +190,20 @@
           backdrop-filter: blur(1px);
   cursor: pointer;
   z-index: -1;
+}
+
+@media (max-width: 900px) {
+  .article__detail-content {
+    overflow-y: auto;
+    flex-direction: column;
+    height: 100%;
+    max-width: 40rem;
+  }
+  .article__detail-content--active .article__detail-group {
+    border-right: none !important;
+  }
+  .article__detail-group {
+    overflow-y: unset;
+    height: auto;
+  }
 }/*# sourceMappingURL=articleDetail.style.css.map */
