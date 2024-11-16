@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { dateFormatter } from '../../utils/dateFormatter';
 import './styles/articleComment.style.css';
 import { useSelector } from 'react-redux';
+import { dateFormatter } from '../../utils/dateFormatter';
 
 function ArticleComment({ commentRef, tempComments, setTempComments }) {
   const user = useSelector((store) => store.user.user);
@@ -21,6 +21,7 @@ function ArticleComment({ commentRef, tempComments, setTempComments }) {
 }
 
 function CommentUser({ user, setTempComments }) {
+  const [error, setError] = useState('');
   const textRef = useRef();
 
   function handleInput() {
@@ -34,6 +35,11 @@ function CommentUser({ user, setTempComments }) {
   function handleSubmit(e) {
     e.preventDefault();
     const { value } = textRef.current;
+
+    if (!user) {
+      setError('Login is required');
+      return;
+    }
 
     if (value.trim() === '') return;
 
@@ -64,31 +70,34 @@ function CommentUser({ user, setTempComments }) {
   }
 
   return (
-    <div className="comment__user">
-      <div className="image-container">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
-          alt="your profile pic"
-        />
-      </div>
-      <form onSubmit={handleSubmit}>
-        <div className="comment__user-comment">
-          <textarea
-            ref={textRef}
-            placeholder="Add a comment..."
-            name="comment"
-            onInput={handleInput}
-            rows={1}
+    <>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <div className="comment__user">
+        <div className="image-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
+            alt="your profile pic"
           />
         </div>
-        <div className="comment__user-btns">
-          <button type="button" onClick={handleReset}>
-            Cancel
-          </button>
-          <button type="submit">Comment</button>
-        </div>
-      </form>
-    </div>
+        <form onSubmit={handleSubmit}>
+          <div className="comment__user-comment">
+            <textarea
+              ref={textRef}
+              placeholder="Add a comment..."
+              name="comment"
+              onInput={handleInput}
+              rows={1}
+            />
+          </div>
+          <div className="comment__user-btns">
+            <button type="button" onClick={handleReset}>
+              Cancel
+            </button>
+            <button type="submit">Comment</button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }
 
