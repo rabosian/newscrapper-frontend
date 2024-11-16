@@ -7,7 +7,7 @@ import api from '../../utils/api';
 // 3. updateComment - like 추가
 
 export const getComments = createAsyncThunk(
-  'articles/getComments',
+  'comments/getComments',
   async (articleId, { rejectWithValue }) => {
     try {
       const response = await api.get('/comments', { articleId });
@@ -20,7 +20,7 @@ export const getComments = createAsyncThunk(
 );
 
 export const createComment = createAsyncThunk(
-  'articles/createComment',
+  'comments/createComment',
   async (articleId, contents, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post('/comments', { articleId, contents });
@@ -34,7 +34,7 @@ export const createComment = createAsyncThunk(
 );
 
 export const deleteComment = createAsyncThunk(
-  'articles/createComment',
+  'comments/createComment',
   async (articleId, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post('/comments', { articleId });
