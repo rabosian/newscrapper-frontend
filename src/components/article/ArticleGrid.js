@@ -7,7 +7,6 @@ import {
 } from '../../features/article/articleSlice';
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
-import ArticleDetail from './ArticleDetail';
 
 function ArticleGrid() {
   const dispatch = useDispatch();
