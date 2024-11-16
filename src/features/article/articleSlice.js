@@ -33,6 +33,12 @@ const articleSlice = createSlice({
     clearErrors: (state) => {
       state.error = null;
     },
+    setSelectedArticle: (state, action) => {
+      state.selectedArticle = action.payload;
+    },
+    setClearSelectedArticle: (state) => {
+      state.selectedArticle = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -53,3 +59,5 @@ const articleSlice = createSlice({
 });
 
 export default articleSlice.reducer;
+export const { setSelectedArticle, setClearSelectedArticle } =
+  articleSlice.actions;

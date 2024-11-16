@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './styles/articleGrid.style.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getArticles } from '../../features/article/articleSlice';
+import {
+  getArticles,
+  setSelectedArticle,
+} from '../../features/article/articleSlice';
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
 import ArticleDetail from './ArticleDetail';
@@ -9,18 +12,13 @@ import ArticleDetail from './ArticleDetail';
 function ArticleGrid() {
   const dispatch = useDispatch();
   const articleList = useSelector((state) => state.article.articleList);
-  const [article, setArticle] = useState(null);
-
-  // 나중에 redux로 구현할지 여부 정하기
-  const [modalOn, setModalOn] = useState(false);
 
   useEffect(() => {
     dispatch(getArticles());
   }, []);
 
   function handleOpen(item) {
-    setModalOn((prev) => !prev);
-    setArticle(item);
+    dispatch(setSelectedArticle(item));
   }
 
   if (articleList.length === 0) return <EmptyItem />;
@@ -41,13 +39,6 @@ function ArticleGrid() {
             );
           })}
       </div>
-      {modalOn && (
-        <ArticleDetail
-          handleOpen={handleOpen}
-          article={article}
-          modalOn={modalOn}
-        />
-      )}
     </article>
   );
 }

@@ -9,6 +9,7 @@ import CategoryPage from '../pages/CategoryPage/CategoryPage';
 import PrivateRoute from './PrivateRoute';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import Modal from '../components/common/Modal';
 
 const AppRouter = () => {
   return (
@@ -23,6 +24,7 @@ const AppRouter = () => {
         </Route>
         <Route path="/category" element={<CategoryPage />} />
       </Routes>
+      <Modal />
       <Footer />
     </div>
   );

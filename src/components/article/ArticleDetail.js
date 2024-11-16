@@ -2,27 +2,32 @@ import React, { useEffect } from 'react';
 import './styles/articleDetail.style.css';
 import { dateFormatter } from '../../utils/dateFormatter';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setClearSelectedArticle } from '../../features/article/articleSlice';
 
 const body = document.getElementsByTagName('body')[0];
 
-function ArticleDetail({ handleOpen, article, modalOn }) {
+function ArticleDetail({ article }) {
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (modalOn) {
+    if (article) {
       body.style.overflow = 'hidden';
     }
 
     return () => {
       body.style.overflow = 'auto';
     };
-  }, [modalOn]);
+  }, []);
+
+  function handleClose() {
+    dispatch(setClearSelectedArticle());
+  }
+
   return (
     <>
       <section className="article__detail">
         <div className="article__detail-content">
-          <div
-            className="article__detail-close"
-            onClick={() => handleOpen(null)}
-          >
+          <div className="article__detail-close" onClick={handleClose}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -42,7 +47,7 @@ function ArticleDetail({ handleOpen, article, modalOn }) {
           {/* comments */}
           {/* <div className="article__detail-comments"></div> */}
         </div>
-        <div className="back-cover" onClick={() => handleOpen(null)}></div>
+        <div className="back-cover" onClick={handleClose}></div>
       </section>
     </>
   );
