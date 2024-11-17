@@ -1,28 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './styles/articleComment.style.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { dateFormatter } from '../../utils/dateFormatter';
+import { createComment } from '../../features/comment/commentSlice';
+import LikeIcon from '../../assets/icons/LikeIcon';
+import EditIcon from '../../assets/icons/EditIcon';
+import DeleteIcon from '../../assets/icons/DeleteIcon';
 
-function ArticleComment({ commentRef, tempComments, setTempComments }) {
+function ArticleComment({
+  articleId,
+  commentRef,
+  // tempComments,
+  // setTempComments,
+}) {
   const user = useSelector((store) => store.user.user);
+  const { loading, error, commentList } = useSelector(
+    (store) => store.comments
+  );
 
   return (
     <div className="comment" ref={commentRef}>
       {/* user */}
-      <CommentUser user={user} setTempComments={setTempComments} />
+      <CommentUser articleId={articleId} user={user} />
       {/* others */}
       <div className="comment__list">
-        {tempComments.map((item) => (
-          <CommentCard key={item.id} {...item} />
+        {commentList.map((item) => (
+          <CommentCard key={item._id} {...item} user={user} />
         ))}
       </div>
     </div>
   );
 }
 
-function CommentUser({ user, setTempComments }) {
+function CommentUser({ articleId, user, setTempComments }) {
+  const dispatch = useDispatch();
   const [error, setError] = useState('');
   const textRef = useRef();
+  const [hasFocus, setHasFocus] = useState(false);
 
   function handleInput() {
     const textarea = textRef.current;
@@ -45,18 +59,8 @@ function CommentUser({ user, setTempComments }) {
 
     // 이 값을 서버에 보내면 될 듯
     // 유저 아이디 + 유저가 입력한 값
-    // const payload = { userId: user._id, comment: value };
-
-    // 테스트용 - 코멘트가 추가됨
-    setTempComments((prev) => [
-      ...prev,
-      {
-        userId: user._id,
-        comment: value,
-        name: user.name,
-        id: new Date(Date.now()).toISOString(),
-      },
-    ]);
+    const payload = { articleId, contents: value };
+    dispatch(createComment(payload));
 
     handleReset();
   }
@@ -66,6 +70,29 @@ function CommentUser({ user, setTempComments }) {
     if (textarea) {
       textarea.style.height = 'auto';
       textarea.value = '';
+    }
+  }
+
+  /* Focus textarea to display buttons */
+  function handleFocus() {
+    setHasFocus(true);
+  }
+  useEffect(() => {
+    if (hasFocus) {
+      document.addEventListener('click', focusOnTarget);
+    }
+    if (!hasFocus) {
+      document.removeEventListener('click', focusOnTarget);
+    }
+    return () => document.removeEventListener('click', focusOnTarget);
+  }, [hasFocus]);
+  function focusOnTarget(e) {
+    if (
+      !e?.target?.className.includes('comment__user-comment') &&
+      !e?.target?.parentElement?.className.includes('comment__user-btns') &&
+      !e?.target?.className.includes('comment__user-btns')
+    ) {
+      setHasFocus(false);
     }
   }
 
@@ -79,38 +106,72 @@ function CommentUser({ user, setTempComments }) {
             alt="your profile pic"
           />
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="comment__user-comment">
-            <textarea
-              ref={textRef}
-              placeholder="Add a comment..."
-              name="comment"
-              onInput={handleInput}
-              rows={1}
-            />
-          </div>
-          <div className="comment__user-btns">
-            <button type="button" onClick={handleReset}>
-              Cancel
-            </button>
-            <button type="submit">Comment</button>
-          </div>
+        <form
+          onSubmit={handleSubmit}
+          tabIndex={0}
+          className="comment__user-form"
+        >
+          <textarea
+            className="comment__user-comment"
+            ref={textRef}
+            placeholder="Add a comment..."
+            name="comment"
+            onInput={handleInput}
+            rows={1}
+            onClick={handleFocus}
+          />
+          {hasFocus && (
+            <div className="comment__user-btns">
+              <button type="button" onClick={handleReset}>
+                Cancel
+              </button>
+              <button type="submit">Comment</button>
+            </div>
+          )}
         </form>
       </div>
     </>
   );
 }
 
-function CommentCard({ userId, comment, name, id }) {
+function CommentCard({
+  contents,
+  createdAt,
+  userId,
+  like_count,
+  updatedAt,
+  _id,
+  user,
+}) {
   const pRef = useRef();
   const [large, setLarge] = useState(false);
   const [readMore, setReadMore] = useState(false);
 
-  useEffect(() => {
-    if (comment) {
-      // console.log(comment.length);
-    }
-  }, [comment]);
+  // articleId: "6738b371a5d517e4489914d8"
+  // contents:"첫번째"
+  // createdAt:"2024-11-17T08:39:49.729Z"
+  // like_count:0
+  // updatedAt:"2024-11-17T08:39:49.729Z"
+  // userId:"6728d4b6a37135d548b4effe"
+  // _id:"6739abd577bc942f9c47b684"
+
+  // 필요한거
+  // 유저 구글 이름
+  // 유저 구글 이미지
+  // Edit flag
+  // Like flag
+
+  // 지우기
+
+  // useEffect(() => {
+  //   if (comment) {
+  //   }
+  // }, [comment]);
+
+  const option = {
+    myComment: user._id === userId,
+    like_count,
+  };
 
   useEffect(() => {
     if (pRef.current) {
@@ -124,38 +185,70 @@ function CommentCard({ userId, comment, name, id }) {
   function handleRead() {
     setReadMore((prev) => !prev);
   }
+
   return (
     <>
-      <section className="comment__list-item" key={id}>
+      <section className="comment__list-card" key={_id}>
         <div className="image-container">
           <img
             src="https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
-            alt={name}
+            alt={userId}
           />
         </div>
         <div className="comment__list-content">
-          <div className="comment__profile-name">
-            <h3>{name}</h3>
-            <div className="comment__profile-date">{dateFormatter(id)}</div>
+          <div className="comment__profile">
+            <h3>{userId}</h3>
+            <div className="comment__profile-date">
+              {dateFormatter(createdAt)}
+            </div>
           </div>
           <div className="comment__list-comment">
-            <div className="comment__list-comment-top">
-              <p className={`${large && !readMore && 'hide'}`}>{comment}</p>
-              <textarea ref={pRef} value={comment} readOnly />
-              <button>::</button>
-            </div>
-            {large && (
-              <button
-                className="comment__list-comment-bot"
-                onClick={handleRead}
-              >
-                {readMore ? 'read less' : 'read more'}
-              </button>
-            )}
+            <p className={`${large && !readMore && 'hide'}`}>{contents}</p>
+            <textarea ref={pRef} value={contents} readOnly />
           </div>
+          {large && (
+            <button className="comment__list-readmore" onClick={handleRead}>
+              {readMore ? 'Show less' : 'Read more'}
+            </button>
+          )}
+          <CommentOption {...option} />
         </div>
       </section>
     </>
+  );
+}
+
+function CommentOption({ myComment, like_count }) {
+  const [hasLike, setHasLike] = useState(false);
+  function handleLike() {
+    setHasLike((prev) => !prev);
+  }
+  return (
+    <div className="comment__option">
+      <div className="comment__option-item">
+        {/* LIKE */}
+        <button onClick={handleLike} title="like comment">
+          {hasLike ? <LikeIcon fill={true} /> : <LikeIcon fill={false} />}
+        </button>
+        {hasLike ? like_count + 1 : like_count}
+      </div>
+      {myComment && (
+        <>
+          {/* EDIT */}
+          <div className="comment__option-item">
+            <button title="edit comment">
+              <EditIcon />
+            </button>
+          </div>
+          {/* DELETE */}
+          <div className="comment__option-item">
+            <button title="delete comment">
+              <DeleteIcon />
+            </button>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
