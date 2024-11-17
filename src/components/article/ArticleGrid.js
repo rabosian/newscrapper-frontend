@@ -20,6 +20,10 @@ function ArticleGrid() {
     dispatch(setSelectedArticle(item));
   }
 
+  useEffect(() => {
+    console.log(articleList);
+  }, [articleList]);
+
   if (articleList.length === 0) return <EmptyItem />;
 
   return (

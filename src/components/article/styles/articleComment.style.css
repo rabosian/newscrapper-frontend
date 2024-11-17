@@ -25,16 +25,13 @@
 }
 .comment__profile {
   display: flex;
-  gap: 1em;
-}
-.comment__profile-name {
-  display: flex;
   gap: 0.5em;
   align-items: center;
 }
 .comment__profile h3 {
   font-weight: bold;
-  color: var(--clr-font-drk);
+  font-size: 0.8em;
+  color: var(--clr-font);
 }
 .comment__profile-date {
   font-size: 0.8em;
@@ -52,7 +49,7 @@
   flex-direction: column;
   gap: 0.5em;
 }
-.comment__user-comment textarea {
+.comment__user textarea {
   height: auto;
   width: 100%;
   font-size: 1rem;
@@ -63,13 +60,13 @@
   resize: none;
   line-height: 1.5rem;
 }
-.comment__user-comment textarea::-moz-placeholder {
+.comment__user textarea::-moz-placeholder {
   color: #b2b2b2;
 }
-.comment__user-comment textarea::placeholder {
+.comment__user textarea::placeholder {
   color: #b2b2b2;
 }
-.comment__user-comment textarea:focus {
+.comment__user textarea:focus {
   border-bottom: 1px solid rgb(1, 1, 1);
 }
 .comment__user-btns {
@@ -91,7 +88,7 @@
   flex-direction: column;
   gap: 1.6em;
 }
-.comment__list-item {
+.comment__list-card {
   display: flex;
   gap: 1rem;
   width: 100%;
@@ -100,9 +97,13 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 0.5em;
 }
 .comment__list-comment {
   width: 100%;
+  display: flex;
+  display: flex;
+  gap: 1em;
 }
 .comment__list-comment textarea {
   display: none;
@@ -119,19 +120,40 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.comment__list-comment-top {
-  display: flex;
-  gap: 1em;
-}
-.comment__list-comment-top button {
+.comment__list-comment button {
   margin-left: auto;
   margin-bottom: auto;
 }
-.comment__list-comment-bot {
-  padding: 0.5em 0;
+.comment__list-readmore {
   font-weight: bold;
-  font-size: 1rem;
+  margin-right: auto;
+  font-size: 0.9em;
   color: var(--clr-font);
+  margin-top: 0.5em;
+}
+
+.comment__option {
+  display: flex;
+  gap: 1em;
+}
+.comment__option-item {
+  display: flex;
+  gap: 0.25em;
+  align-items: center;
+}
+.comment__option-item button {
+  display: flex;
+  align-items: center;
+  padding: 0.25em;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+}
+.comment__option-item button:hover {
+  background-color: #dfdfdf;
+}
+.comment__option-item button svg {
+  stroke: #666666;
 }
 
 @media (max-width: 900px) {

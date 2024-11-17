@@ -28,15 +28,12 @@
 
   &__profile {
     display: flex;
-    gap: 1em;
-    &-name {
-      display: flex;
-      gap: 0.5em;
-      align-items: center;
-    }
+    gap: 0.5em;
+    align-items: center;
     h3 {
       font-weight: bold;
-      color: var(--clr-font-drk);
+      font-size: 0.8em;
+      color: var(--clr-font);
     }
     &-date {
       font-size: 0.8em;
@@ -49,6 +46,7 @@
   margin-top: 1rem;
   display: flex;
   gap: 1em;
+
   form {
     width: 100%;
     display: flex;
@@ -56,25 +54,23 @@
     gap: 0.5em;
   }
 
-  &-comment {
-    textarea {
-      height: auto;
-      width: 100%;
-      font-size: 1rem;
-      border: none;
-      border-bottom: 1px solid #a5a5a5;
-      background-color: transparent;
-      outline: none;
-      resize: none;
-      line-height: 1.5rem;
+  textarea {
+    height: auto;
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid #a5a5a5;
+    background-color: transparent;
+    outline: none;
+    resize: none;
+    line-height: 1.5rem;
 
-      &::placeholder {
-        color: #b2b2b2;
-      }
+    &::placeholder {
+      color: #b2b2b2;
+    }
 
-      &:focus {
-        border-bottom: 1px solid rgb(1, 1, 1);
-      }
+    &:focus {
+      border-bottom: 1px solid rgb(1, 1, 1);
     }
   }
 
@@ -98,7 +94,7 @@
   flex-direction: column;
   gap: 1.6em;
 
-  &-item {
+  &-card {
     display: flex;
     gap: 1rem;
     width: 100%;
@@ -108,10 +104,13 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    gap: 0.5em;
   }
 
   &-comment {
     width: 100%;
+    display: flex;
+
     textarea {
       display: none;
     }
@@ -130,21 +129,45 @@
       text-overflow: ellipsis;
     }
 
-    &-top {
-      display: flex;
-      gap: 1em;
+    display: flex;
+    gap: 1em;
 
-      button {
-        margin-left: auto;
-        margin-bottom: auto;
-      }
+    button {
+      margin-left: auto;
+      margin-bottom: auto;
     }
+  }
 
-    &-bot {
-      padding: 0.5em 0;
-      font-weight: bold;
-      font-size: 1rem;
-      color: var(--clr-font);
+  &-readmore {
+    font-weight: bold;
+    margin-right: auto;
+    font-size: 0.9em;
+    color: var(--clr-font);
+    margin-top: 0.5em;
+  }
+}
+
+.comment__option {
+  display: flex;
+  gap: 1em;
+  &-item {
+    display: flex;
+    gap: 0.25em;
+    align-items: center;
+
+    button {
+      display: flex;
+      align-items: center;
+      padding: 0.25em;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      &:hover {
+        background-color: #dfdfdf;
+      }
+      svg {
+        stroke: #666666;
+      }
     }
   }
 }
