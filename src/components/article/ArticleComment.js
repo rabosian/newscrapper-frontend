@@ -163,16 +163,6 @@ function CommentCard({
 
   // 지우기
 
-  // useEffect(() => {
-  //   if (comment) {
-  //   }
-  // }, [comment]);
-
-  const option = {
-    myComment: user._id === userId,
-    like_count,
-  };
-
   useEffect(() => {
     if (pRef.current) {
       const lineCount = pRef.current.value.split('\n').length;
@@ -211,14 +201,19 @@ function CommentCard({
               {readMore ? 'Show less' : 'Read more'}
             </button>
           )}
-          <CommentOption {...option} />
+          <CommentOption user={user} userId={userId} like_count={like_count} />
         </div>
       </section>
     </>
   );
 }
 
-function CommentOption({ myComment, like_count }) {
+function CommentOption({ user, userId, like_count }) {
+  let option = { like_count };
+  if (user) {
+    option.myComment = userId === user._id;
+  }
+
   const [hasLike, setHasLike] = useState(false);
   function handleLike() {
     setHasLike((prev) => !prev);
@@ -232,7 +227,7 @@ function CommentOption({ myComment, like_count }) {
         </button>
         {hasLike ? like_count + 1 : like_count}
       </div>
-      {myComment && (
+      {option.myComment && (
         <>
           {/* EDIT */}
           <div className="comment__option-item">
