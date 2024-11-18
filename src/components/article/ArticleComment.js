@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { dateFormatter } from '../../utils/dateFormatter';
 import {
   createComment,
+  deleteComment,
   updateComment,
 } from '../../features/comment/commentSlice';
 import LikeIcon from '../../assets/icons/LikeIcon';
 import EditIcon from '../../assets/icons/EditIcon';
 import DeleteIcon from '../../assets/icons/DeleteIcon';
+import Modal from '../../composition/Modal';
 
 function ArticleComment({ articleId, commentRef }) {
   const dispatch = useDispatch();
@@ -16,14 +18,20 @@ function ArticleComment({ articleId, commentRef }) {
   const [loginError, setLoginError] = useState(null);
   const { error, commentList } = useSelector((store) => store.comments);
 
-  function handleLike(commentId) {
-    if (!user) {
-      setLoginError('Log in to access the comment feature');
-      return;
-    }
-    const payload = { articleId, commentId, likeRequest: true };
-    dispatch(updateComment(payload));
-  }
+  const eventObj = {
+    handleLike: (commentId) => {
+      if (!user) {
+        setLoginError('Log in to access the comment feature');
+        return;
+      }
+      const payload = { articleId, commentId, likeRequest: true };
+      dispatch(updateComment(payload));
+    },
+    handleEdit: (commentId) => {},
+    handleDelete: (commentId) => {
+      dispatch(deleteComment({ commentId, articleId }));
+    },
+  };
 
   return (
     <div className="comment" ref={commentRef}>
@@ -38,7 +46,7 @@ function ArticleComment({ articleId, commentRef }) {
               key={item._id}
               comment={item}
               user={user}
-              handleLike={handleLike}
+              eventObj={eventObj}
               loginError={loginError}
             />
           ))}
@@ -114,7 +122,7 @@ function CommentUser({ articleId, user }) {
   );
 }
 
-function CommentCard({ comment, user, handleLike }) {
+function CommentCard({ comment, user, eventObj }) {
   const pRef = useRef();
   const [large, setLarge] = useState(false);
   const [readMore, setReadMore] = useState(false);
@@ -132,8 +140,6 @@ function CommentCard({ comment, user, handleLike }) {
   function handleRead() {
     setReadMore((prev) => !prev);
   }
-
-  function handleEdit() {}
 
   return (
     <>
@@ -162,46 +168,67 @@ function CommentCard({ comment, user, handleLike }) {
               {readMore ? 'Show less' : 'Read more'}
             </button>
           )}
-          <CommentOption
-            user={user}
-            comment={comment}
-            handleLike={handleLike}
-          />
+          <CommentOption user={user} comment={comment} eventObj={eventObj} />
         </div>
       </section>
     </>
   );
 }
 
-function CommentOption({ comment, user, handleLike, handleEdit }) {
+function CommentOption({ comment, user, eventObj, handleEdit }) {
+  const [modalOn, setModalOn] = useState(false);
   let hasLike = comment.likes.find((item) => item.userId === user?._id);
 
   return (
-    <div className="comment__option">
-      <div className="comment__option-item">
-        {/* LIKE */}
-        <button onClick={() => handleLike(comment._id)} title="like comment">
-          {hasLike ? <LikeIcon fill={true} /> : <LikeIcon fill={false} />}
-        </button>
-        {comment.totalLike}
+    <>
+      <div className="comment__option">
+        <div className="comment__option-item">
+          {/* LIKE */}
+          <button
+            onClick={() => eventObj.handleLike(comment._id)}
+            title="like comment"
+          >
+            {hasLike ? <LikeIcon fill={true} /> : <LikeIcon fill={false} />}
+          </button>
+          {comment.totalLike}
+        </div>
+        {comment.userId._id === user?._id && (
+          <>
+            {/* EDIT */}
+            <div className="comment__option-item">
+              <button title="edit comment" onClick={handleEdit}>
+                <EditIcon />
+              </button>
+            </div>
+            {/* DELETE */}
+            <div className="comment__option-item">
+              <button title="delete comment" onClick={() => setModalOn(true)}>
+                <DeleteIcon />
+              </button>
+            </div>
+          </>
+        )}
       </div>
-      {comment.userId._id === user?._id && (
-        <>
-          {/* EDIT */}
-          <div className="comment__option-item">
-            <button title="edit comment" onClick={handleEdit}>
-              <EditIcon />
-            </button>
+      {modalOn && (
+        <Modal setModalOn={setModalOn}>
+          <div className="modal__title">
+            Would you like to <span>delete</span> this comment?
           </div>
-          {/* DELETE */}
-          <div className="comment__option-item">
-            <button title="delete comment">
-              <DeleteIcon />
+          <div className="modal__btn-box">
+            <button
+              className="modal__btn modal__btn--warn"
+              onClick={() => {
+                eventObj.handleDelete(comment._id);
+                setModalOn(false);
+              }}
+            >
+              Delete
             </button>
+            <button onClick={() => setModalOn(false)}>Cancel</button>
           </div>
-        </>
+        </Modal>
       )}
-    </div>
+    </>
   );
 }
 

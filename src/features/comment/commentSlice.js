@@ -34,9 +34,10 @@ export const createComment = createAsyncThunk(
 
 export const deleteComment = createAsyncThunk(
   'comments/deleteComment',
-  async (articleId, { dispatch, rejectWithValue }) => {
+  async ({ articleId, commentId }, { dispatch, rejectWithValue }) => {
+    console.log(articleId, commentId);
     try {
-      const response = await api.post('/comments', { articleId });
+      const response = await api.delete(`/comments/${commentId}`);
       console.log(response.data);
       dispatch(getComments(articleId));
       return response.data;
