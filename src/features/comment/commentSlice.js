@@ -52,13 +52,11 @@ export const updateComment = createAsyncThunk(
     { articleId, commentId, contents, likeRequest },
     { dispatch, rejectWithValue }
   ) => {
-    console.log(commentId, contents, likeRequest);
     try {
       const response = await api.put(`/comments/${commentId}`, {
         contents,
         likeRequest,
       });
-      console.log(response.data);
       dispatch(getComments(articleId));
       return response.data;
     } catch (error) {

@@ -16,10 +16,6 @@ function ArticleComment({ articleId, commentRef }) {
   const [loginError, setLoginError] = useState(null);
   const { error, commentList } = useSelector((store) => store.comments);
 
-  useEffect(() => {
-    console.log('cccccccccccc:', user);
-  }, [user]);
-
   function handleLike(commentId) {
     if (!user) {
       setLoginError('Log in to access the comment feature');
