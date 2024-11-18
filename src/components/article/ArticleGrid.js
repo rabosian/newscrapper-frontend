@@ -3,18 +3,23 @@ import './styles/articleGrid.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getArticles,
+  getArticlesByCategory,
   setSelectedArticle,
 } from '../../features/article/articleSlice';
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
+import { useSearchParams } from 'react-router-dom';
 
 function ArticleGrid() {
   const dispatch = useDispatch();
   const articleList = useSelector((state) => state.article.articleList);
+  const [query] = useSearchParams();
 
   useEffect(() => {
-    dispatch(getArticles());
-  }, []);
+    dispatch(
+      getArticlesByCategory({ category: query.get('category') || 'business' })
+    );
+  }, [query]);
 
   function handleOpen(item) {
     dispatch(setSelectedArticle(item));
