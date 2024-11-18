@@ -43,11 +43,15 @@
   flex: 1 0 50%;
   height: 100%;
   overflow-y: auto;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: varvar(--clr-bg-lgt) var(--clr-bg-lgt);
 }
 .article__detail-group::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
+  width: 4px;
+  height: 4px;
+}
+.article__detail-group::-webkit-scrollbar-thumb {
+  background: var(--clr-bg-lgt);
 }
 .article__detail-close {
   position: absolute;
