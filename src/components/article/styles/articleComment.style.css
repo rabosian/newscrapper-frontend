@@ -3,6 +3,7 @@
   flex-direction: column;
   background-color: var(--clr-bg-lgt);
   padding: 0.75em;
+  padding-top: 1rem;
   flex: 1 0 50%;
   gap: 1em;
   overflow-y: auto;

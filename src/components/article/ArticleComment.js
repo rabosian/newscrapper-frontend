@@ -2,42 +2,60 @@ import React, { useEffect, useRef, useState } from 'react';
 import './styles/articleComment.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { dateFormatter } from '../../utils/dateFormatter';
-import { createComment } from '../../features/comment/commentSlice';
+import {
+  createComment,
+  updateComment,
+} from '../../features/comment/commentSlice';
 import LikeIcon from '../../assets/icons/LikeIcon';
 import EditIcon from '../../assets/icons/EditIcon';
 import DeleteIcon from '../../assets/icons/DeleteIcon';
 
-function ArticleComment({
-  articleId,
-  commentRef,
-  // tempComments,
-  // setTempComments,
-}) {
+function ArticleComment({ articleId, commentRef }) {
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user.user);
-  const { loading, error, commentList } = useSelector(
-    (store) => store.comments
-  );
+  const [loginError, setLoginError] = useState(null);
+  const { error, commentList } = useSelector((store) => store.comments);
+
+  useEffect(() => {
+    console.log('cccccccccccc:', user);
+  }, [user]);
+
+  function handleLike(commentId) {
+    if (!user) {
+      setLoginError('Log in to access the comment feature');
+      return;
+    }
+    const payload = { articleId, commentId, likeRequest: true };
+    dispatch(updateComment(payload));
+  }
 
   return (
     <div className="comment" ref={commentRef}>
+      <span style={{ color: 'red' }}>{loginError}</span>
       {/* user */}
-      <CommentUser articleId={articleId} user={user} />
+      {user && <CommentUser articleId={articleId} user={user} />}
       {/* others */}
       <div className="comment__list">
-        {commentList.map((item) => (
-          <CommentCard key={item._id} {...item} user={user} />
-        ))}
+        {!error &&
+          commentList.map((item) => (
+            <CommentCard
+              key={item._id}
+              comment={item}
+              user={user}
+              handleLike={handleLike}
+              loginError={loginError}
+            />
+          ))}
       </div>
     </div>
   );
 }
 
-function CommentUser({ articleId, user, setTempComments }) {
+function CommentUser({ articleId, user }) {
   const dispatch = useDispatch();
-  const [error, setError] = useState('');
   const textRef = useRef();
-  const [hasFocus, setHasFocus] = useState(false);
 
+  // textarea 사이즈 계산
   function handleInput() {
     const textarea = textRef.current;
     if (textarea) {
@@ -46,22 +64,15 @@ function CommentUser({ articleId, user, setTempComments }) {
     }
   }
 
+  // 서버에 작성한 댓글 올리기
   function handleSubmit(e) {
     e.preventDefault();
     const { value } = textRef.current;
-
-    if (!user) {
-      setError('Login is required');
-      return;
-    }
+    if (!user) return;
 
     if (value.trim() === '') return;
-
-    // 이 값을 서버에 보내면 될 듯
-    // 유저 아이디 + 유저가 입력한 값
     const payload = { articleId, contents: value };
     dispatch(createComment(payload));
-
     handleReset();
   }
 
@@ -73,32 +84,8 @@ function CommentUser({ articleId, user, setTempComments }) {
     }
   }
 
-  /* Focus textarea to display buttons */
-  function handleFocus() {
-    setHasFocus(true);
-  }
-  useEffect(() => {
-    if (hasFocus) {
-      document.addEventListener('click', focusOnTarget);
-    }
-    if (!hasFocus) {
-      document.removeEventListener('click', focusOnTarget);
-    }
-    return () => document.removeEventListener('click', focusOnTarget);
-  }, [hasFocus]);
-  function focusOnTarget(e) {
-    if (
-      !e?.target?.className.includes('comment__user-comment') &&
-      !e?.target?.parentElement?.className.includes('comment__user-btns') &&
-      !e?.target?.className.includes('comment__user-btns')
-    ) {
-      setHasFocus(false);
-    }
-  }
-
   return (
     <>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
       <div className="comment__user">
         <div className="image-container">
           <img
@@ -118,51 +105,25 @@ function CommentUser({ articleId, user, setTempComments }) {
             name="comment"
             onInput={handleInput}
             rows={1}
-            onClick={handleFocus}
           />
-          {hasFocus && (
-            <div className="comment__user-btns">
-              <button type="button" onClick={handleReset}>
-                Cancel
-              </button>
-              <button type="submit">Comment</button>
-            </div>
-          )}
+          <div className="comment__user-btns">
+            <button type="button" onClick={handleReset}>
+              Cancel
+            </button>
+            <button type="submit">Comment</button>
+          </div>
         </form>
       </div>
     </>
   );
 }
 
-function CommentCard({
-  contents,
-  createdAt,
-  userId,
-  like_count,
-  updatedAt,
-  _id,
-  user,
-}) {
+function CommentCard({ comment, user, handleLike }) {
   const pRef = useRef();
   const [large, setLarge] = useState(false);
   const [readMore, setReadMore] = useState(false);
 
-  // articleId: "6738b371a5d517e4489914d8"
-  // contents:"첫번째"
-  // createdAt:"2024-11-17T08:39:49.729Z"
-  // like_count:0
-  // updatedAt:"2024-11-17T08:39:49.729Z"
-  // userId:"6728d4b6a37135d548b4effe"
-  // _id:"6739abd577bc942f9c47b684"
-
-  // 필요한거
-  // 유저 구글 이름
-  // 유저 구글 이미지
-  // Edit flag
-  // Like flag
-
-  // 지우기
-
+  // 댓글 줄 횟수 계산
   useEffect(() => {
     if (pRef.current) {
       const lineCount = pRef.current.value.split('\n').length;
@@ -176,62 +137,63 @@ function CommentCard({
     setReadMore((prev) => !prev);
   }
 
+  function handleEdit() {}
+
   return (
     <>
-      <section className="comment__list-card" key={_id}>
+      <section className="comment__list-card" key={comment._id}>
         <div className="image-container">
           <img
             src="https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
-            alt={userId}
+            alt={comment.userId.name}
           />
         </div>
         <div className="comment__list-content">
           <div className="comment__profile">
-            <h3>{userId}</h3>
+            <h3>{comment.userId.name}</h3>
             <div className="comment__profile-date">
-              {dateFormatter(createdAt)}
+              {dateFormatter(comment.createdAt)}
             </div>
           </div>
           <div className="comment__list-comment">
-            <p className={`${large && !readMore && 'hide'}`}>{contents}</p>
-            <textarea ref={pRef} value={contents} readOnly />
+            <p className={`${large && !readMore && 'hide'}`}>
+              {comment.contents}
+            </p>
+            <textarea ref={pRef} value={comment.contents} readOnly />
           </div>
           {large && (
             <button className="comment__list-readmore" onClick={handleRead}>
               {readMore ? 'Show less' : 'Read more'}
             </button>
           )}
-          <CommentOption user={user} userId={userId} like_count={like_count} />
+          <CommentOption
+            user={user}
+            comment={comment}
+            handleLike={handleLike}
+          />
         </div>
       </section>
     </>
   );
 }
 
-function CommentOption({ user, userId, like_count }) {
-  let option = { like_count };
-  if (user) {
-    option.myComment = userId === user._id;
-  }
+function CommentOption({ comment, user, handleLike, handleEdit }) {
+  let hasLike = comment.likes.find((item) => item.userId === user?._id);
 
-  const [hasLike, setHasLike] = useState(false);
-  function handleLike() {
-    setHasLike((prev) => !prev);
-  }
   return (
     <div className="comment__option">
       <div className="comment__option-item">
         {/* LIKE */}
-        <button onClick={handleLike} title="like comment">
+        <button onClick={() => handleLike(comment._id)} title="like comment">
           {hasLike ? <LikeIcon fill={true} /> : <LikeIcon fill={false} />}
         </button>
-        {hasLike ? like_count + 1 : like_count}
+        {comment.totalLike}
       </div>
-      {option.myComment && (
+      {comment.userId._id === user?._id && (
         <>
           {/* EDIT */}
           <div className="comment__option-item">
-            <button title="edit comment">
+            <button title="edit comment" onClick={handleEdit}>
               <EditIcon />
             </button>
           </div>
