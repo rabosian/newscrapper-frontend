@@ -57,6 +57,6 @@
   padding: 0.25em 0.75em;
 }
 .modal__btn--warn {
-  background-color: rgb(236, 69, 69);
+  background-color: var(--clr-highlight);
   color: #fff;
 }/*# sourceMappingURL=modal.style.css.map */

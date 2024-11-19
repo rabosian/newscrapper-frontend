@@ -112,7 +112,7 @@
     width: 100%;
     display: flex;
 
-    textarea {
+    .display-none {
       display: none;
     }
 
@@ -137,6 +137,19 @@
       margin-left: auto;
       margin-bottom: auto;
     }
+  }
+
+  &-edit {
+    height: auto;
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid #a5a5a5;
+    background-color: transparent;
+    outline: none;
+    resize: none;
+    line-height: 1.5rem;
+    resize: none;
   }
 
   &-readmore {

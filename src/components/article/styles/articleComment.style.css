@@ -106,7 +106,7 @@
   display: flex;
   gap: 1em;
 }
-.comment__list-comment textarea {
+.comment__list-comment .display-none {
   display: none;
 }
 .comment__list-comment p {
@@ -124,6 +124,18 @@
 .comment__list-comment button {
   margin-left: auto;
   margin-bottom: auto;
+}
+.comment__list-edit {
+  height: auto;
+  width: 100%;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 1px solid #a5a5a5;
+  background-color: transparent;
+  outline: none;
+  resize: none;
+  line-height: 1.5rem;
+  resize: none;
 }
 .comment__list-readmore {
   font-weight: bold;
