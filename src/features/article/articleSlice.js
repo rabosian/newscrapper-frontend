@@ -11,7 +11,6 @@ export const getArticles = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get('/articles');
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);

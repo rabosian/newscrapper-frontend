@@ -1,13 +1,12 @@
 .home {
   display: flex;
-  justify-content: center;
   gap: 2em;
-  padding: 1em;
+  padding: 0 1em;
   padding-top: 4em;
-  padding-bottom: 4em;
+  width: 100%;
 }
 .home .wrapper {
-  margin: 0;
+  margin: 0 auto;
   width: 100%;
 }
 .home__top-height {
@@ -21,60 +20,47 @@
   flex-direction: column;
   max-width: 15rem;
   width: 100%;
+  border-right: 1px solid #c9c9c9;
 }
 .home__aside-sticky {
   position: sticky;
   top: 5em;
   padding-bottom: 8em;
-  height: 100vh;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--clr-highlight) var(--clr-bg-lgt);
+  scrollbar-color: var(--clr-primary) var(--clr-bg-lgt);
 }
 .home__aside-sticky::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
 .home__aside-sticky::-webkit-scrollbar-thumb {
-  background: var(--clr-highlight);
+  background: var(--clr-primary);
 }
 .home__aside-box {
   display: flex;
   flex-direction: column;
-  gap: 2em;
+  gap: 1.25em;
 }
 .home__aside-profile {
   position: relative;
   padding: 1.5em;
-  background-color: var(--clr-bg-lgt);
-  border-radius: 1em;
   display: flex;
   flex-direction: column;
   gap: 0.5em;
   align-items: center;
-  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.152);
-}
-.home__aside-profile svg {
-  position: absolute;
-  right: 1em;
-  top: 1em;
-  fill: none;
-  stroke-width: 2px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  margin-left: auto;
-  color: var(--clr-font-md);
-  cursor: pointer;
-}
-.home__aside-profile svg:hover {
-  color: var(--clr-font);
 }
 .home__aside-profile .image-container {
-  width: 6em;
+  width: 4em;
   aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
+}
+.home__aside .line {
+  width: 100%;
+  height: 1px;
+  background-color: #c9c9c9;
 }
 .home__aside-name {
   font-weight: bold;
@@ -82,16 +68,13 @@
   text-align: center;
 }
 .home__aside-category {
-  border-radius: 1em;
+  border-radius: 0.5em;
   padding: 2em 1.5em;
-  background-color: var(--clr-bg-lgt);
   display: flex;
   flex-direction: column;
   gap: 2em;
-  box-shadow: 0px 4px 8px -4px rgba(0, 0, 0, 0.152);
 }
 .home__aside h3 {
-  text-align: center;
   font-size: 1.25em;
   font-weight: bold;
 }
@@ -111,7 +94,7 @@
   color: var(--clr-font-drk);
 }
 
-@media (max-width: 920px) {
+@media (max-width: 1125px) {
   .home__aside {
     display: none;
   }

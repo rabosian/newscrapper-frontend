@@ -9,25 +9,23 @@ import {
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
 import { useSearchParams } from 'react-router-dom';
+import { categoryList } from '../../utils/categoryList';
 
 function ArticleGrid() {
   const dispatch = useDispatch();
   const articleList = useSelector((state) => state.article.articleList);
   const [query] = useSearchParams();
 
+  let category = query.get('category') || 'business';
+  if (!categoryList.includes(category)) category = 'business';
+
   useEffect(() => {
-    dispatch(
-      getArticlesByCategory({ category: query.get('category') || 'business' })
-    );
+    dispatch(getArticlesByCategory({ category }));
   }, [query]);
 
   function handleOpen(item) {
     dispatch(setSelectedArticle(item));
   }
-
-  useEffect(() => {
-    console.log(articleList);
-  }, [articleList]);
 
   if (articleList.length === 0) return <EmptyItem />;
 
@@ -35,7 +33,9 @@ function ArticleGrid() {
     <article className="article">
       <header className="article__header">
         {/* store -> 카테고리에서 이름 가져오기 */}
-        <h1>Today Headlines</h1>
+        <h1>
+          <span>{category}</span> Today
+        </h1>
       </header>
       <div className="article__content">
         {/* MAP -> GRID */}
