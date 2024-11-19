@@ -1,7 +1,7 @@
 .article__card {
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  gap: 0.5em;
 }
 .article__card-text:hover h2,
 .article__card .image-container:hover ~ .article__card-content h2 {
@@ -17,7 +17,7 @@
 .article__card .image-container {
   aspect-ratio: 3/2;
   width: 100%;
-  border-radius: 1em;
+  border-radius: 0.5em;
   overflow: hidden;
   flex-shrink: 0;
   cursor: pointer;

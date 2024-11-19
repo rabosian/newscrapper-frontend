@@ -1,6 +1,8 @@
 .article {
   display: flex;
   flex-direction: column;
+  padding-bottom: 4em;
+  margin: auto;
 
   &__header {
     height: 5em;
@@ -11,11 +13,46 @@
   h1 {
     font-weight: bolder;
     font-size: 1.6em;
+    text-transform: capitalize;
+    color: var(--clr-primary);
   }
 
   &__content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2em;
+    grid-template-columns: repeat(5, minmax(280px, 1fr));
+    gap: 1.25em;
+  }
+}
+
+@media (max-width: 1800px) {
+  .article {
+    &__content {
+      grid-template-columns: repeat(4, minmax(280px, 1fr));
+    }
+  }
+}
+
+@media (max-width: 1500px) {
+  .article {
+    &__content {
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
+    }
+  }
+}
+
+@media (max-width: 950px) {
+  .article {
+    &__content {
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
+    }
+  }
+}
+
+@media (max-width: 630px) {
+  .article {
+    &__content {
+      grid-template-columns: repeat(1, minmax(200px, 1fr));
+      gap: 2rem;
+    }
   }
 }

@@ -13,7 +13,7 @@
 .article__detail-content {
   display: flex;
   max-width: 40rem;
-  max-height: 50rem;
+  max-height: 54rem;
   width: 100%;
   height: 100%;
   background-color: var(--clr-bg-lgt);
@@ -178,7 +178,7 @@
 }
 .article__detail-comment--active button {
   color: #fff;
-  background-color: var(--clr-highlight);
+  background-color: var(--clr-primary);
 }
 
 /* ------------ Behind modal color ----------- */

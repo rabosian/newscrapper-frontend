@@ -56,7 +56,7 @@
 .login label:focus-within {
   outline: 1px solid #dadada;
   background-color: #fbfbff;
-  color: var(--clr-highlight);
+  color: var(--clr-primary);
 }
 .login label:focus-within input {
   border-bottom: 1px solid black;
@@ -82,12 +82,12 @@
 }
 .login__btn-submit {
   color: #fff;
-  background-color: var(--clr-highlight);
-  border: 1px solid var(--clr-highlight);
+  background-color: var(--clr-primary);
+  border: 1px solid var(--clr-primary);
 }
 .login__btn-submit:hover {
-  background-color: #4d29de;
-  border: 1px solid #4d29de;
+  background-color: var(--clr-highlight);
+  border: 1px solid var(--clr-highlight);
 }
 .login__error {
   color: red;
