@@ -18,6 +18,7 @@ function HomePage() {
 
 function HomeAside({ categories }) {
   const { user } = useSelector((store) => store.user);
+  // console.log(user);
 
   return (
     <aside className="home__aside">
@@ -46,7 +47,10 @@ function HomeAside({ categories }) {
               </svg>
               <div className="image-container">
                 <img
-                  src="https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
+                  src={
+                    user.picture ||
+                    'https://cdn-icons-png.flaticon.com/512/9385/9385289.png'
+                  }
                   alt="profile pic"
                 />
               </div>
