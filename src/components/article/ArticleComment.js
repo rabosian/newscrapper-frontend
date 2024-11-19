@@ -2,42 +2,68 @@ import React, { useEffect, useRef, useState } from 'react';
 import './styles/articleComment.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { dateFormatter } from '../../utils/dateFormatter';
-import { createComment } from '../../features/comment/commentSlice';
+import {
+  createComment,
+  deleteComment,
+  updateComment,
+} from '../../features/comment/commentSlice';
 import LikeIcon from '../../assets/icons/LikeIcon';
 import EditIcon from '../../assets/icons/EditIcon';
 import DeleteIcon from '../../assets/icons/DeleteIcon';
+import Modal from '../../composition/Modal';
 
-function ArticleComment({
-  articleId,
-  commentRef,
-  // tempComments,
-  // setTempComments,
-}) {
+function ArticleComment({ articleId, commentRef }) {
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user.user);
-  const { loading, error, commentList } = useSelector(
-    (store) => store.comments
-  );
+  const [loginError, setLoginError] = useState(null);
+  const { error, commentList } = useSelector((store) => store.comments);
+
+  // event handler method
+  const eventObj = {
+    handleLike: (commentId) => {
+      if (!user) {
+        setLoginError('Log in to access the comment feature');
+        return;
+      }
+      const payload = { articleId, commentId, likeRequest: true };
+      dispatch(updateComment(payload));
+    },
+    handleEdit: ({ commentId, contents }) => {
+      const payload = { articleId, commentId, contents };
+      dispatch(updateComment(payload));
+    },
+    handleDelete: (commentId) => {
+      dispatch(deleteComment({ commentId, articleId }));
+    },
+  };
 
   return (
     <div className="comment" ref={commentRef}>
-      {/* user */}
-      <CommentUser articleId={articleId} user={user} />
-      {/* others */}
+      <span style={{ color: 'red' }}>{loginError}</span>
+      {/* user write comment */}
+      {user && <CommentUser articleId={articleId} user={user} />}
+      {/* comment lists */}
       <div className="comment__list">
-        {commentList.map((item) => (
-          <CommentCard key={item._id} {...item} user={user} />
-        ))}
+        {!error &&
+          commentList.map((item) => (
+            <CommentCard
+              key={item._id}
+              comment={item}
+              user={user}
+              eventObj={eventObj}
+              loginError={loginError}
+            />
+          ))}
       </div>
     </div>
   );
 }
 
-function CommentUser({ articleId, user, setTempComments }) {
+function CommentUser({ articleId, user }) {
   const dispatch = useDispatch();
-  const [error, setError] = useState('');
   const textRef = useRef();
-  const [hasFocus, setHasFocus] = useState(false);
 
+  // textarea 사이즈 계산
   function handleInput() {
     const textarea = textRef.current;
     if (textarea) {
@@ -46,22 +72,15 @@ function CommentUser({ articleId, user, setTempComments }) {
     }
   }
 
+  // 서버에 작성한 댓글 올리기
   function handleSubmit(e) {
     e.preventDefault();
     const { value } = textRef.current;
-
-    if (!user) {
-      setError('Login is required');
-      return;
-    }
+    if (!user) return;
 
     if (value.trim() === '') return;
-
-    // 이 값을 서버에 보내면 될 듯
-    // 유저 아이디 + 유저가 입력한 값
     const payload = { articleId, contents: value };
     dispatch(createComment(payload));
-
     handleReset();
   }
 
@@ -73,32 +92,8 @@ function CommentUser({ articleId, user, setTempComments }) {
     }
   }
 
-  /* Focus textarea to display buttons */
-  function handleFocus() {
-    setHasFocus(true);
-  }
-  useEffect(() => {
-    if (hasFocus) {
-      document.addEventListener('click', focusOnTarget);
-    }
-    if (!hasFocus) {
-      document.removeEventListener('click', focusOnTarget);
-    }
-    return () => document.removeEventListener('click', focusOnTarget);
-  }, [hasFocus]);
-  function focusOnTarget(e) {
-    if (
-      !e?.target?.className.includes('comment__user-comment') &&
-      !e?.target?.parentElement?.className.includes('comment__user-btns') &&
-      !e?.target?.className.includes('comment__user-btns')
-    ) {
-      setHasFocus(false);
-    }
-  }
-
   return (
     <>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
       <div className="comment__user">
         <div className="image-container">
           <img
@@ -118,132 +113,196 @@ function CommentUser({ articleId, user, setTempComments }) {
             name="comment"
             onInput={handleInput}
             rows={1}
-            onClick={handleFocus}
           />
-          {hasFocus && (
-            <div className="comment__user-btns">
-              <button type="button" onClick={handleReset}>
-                Cancel
-              </button>
-              <button type="submit">Comment</button>
-            </div>
-          )}
+          <div className="comment__user-btns">
+            <button type="button" onClick={handleReset}>
+              Cancel
+            </button>
+            <button type="submit">Comment</button>
+          </div>
         </form>
       </div>
     </>
   );
 }
 
-function CommentCard({
-  contents,
-  createdAt,
-  userId,
-  like_count,
-  updatedAt,
-  _id,
-  user,
-}) {
-  const pRef = useRef();
+function CommentCard({ comment, user, eventObj }) {
+  const textRef = useRef();
+  const editRef = useRef();
   const [large, setLarge] = useState(false);
   const [readMore, setReadMore] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
-  // articleId: "6738b371a5d517e4489914d8"
-  // contents:"첫번째"
-  // createdAt:"2024-11-17T08:39:49.729Z"
-  // like_count:0
-  // updatedAt:"2024-11-17T08:39:49.729Z"
-  // userId:"6728d4b6a37135d548b4effe"
-  // _id:"6739abd577bc942f9c47b684"
+  const hasEdited = comment.createdAt !== comment.updatedAt;
 
-  // 필요한거
-  // 유저 구글 이름
-  // 유저 구글 이미지
-  // Edit flag
-  // Like flag
-
-  // 지우기
-
+  // 댓글 줄 횟수 계산
   useEffect(() => {
-    if (pRef.current) {
-      const lineCount = pRef.current.value.split('\n').length;
+    if (textRef.current) {
+      const lineCount = textRef.current.value.split('\n').length;
       if (lineCount > 2) {
         setLarge(true);
       }
     }
-  }, [pRef.current]);
+  }, [textRef.current]);
 
-  function handleRead() {
-    setReadMore((prev) => !prev);
+  // edit 눌렀을시에 textarea 초기 높이 수정하기
+  useEffect(() => {
+    if (isEditing) {
+      handleInput();
+      editRef.current.focus();
+    }
+  }, [isEditing]);
+
+  // textarea 사이즈 계산
+  function handleInput() {
+    const textarea = editRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight + 1}px`;
+    }
+  }
+
+  // 댓글 수정하기
+  function handleEditSubmit(e) {
+    e.preventDefault();
+    if (!editRef.current.value) {
+      setIsEditing(false);
+      setReadMore(true);
+      return;
+    }
+    eventObj.handleEdit({
+      commentId: comment._id,
+      contents: editRef.current.value,
+    });
+    setIsEditing(false);
+    setReadMore(true);
   }
 
   return (
     <>
-      <section className="comment__list-card" key={_id}>
+      <section className="comment__list-card" key={comment._id}>
         <div className="image-container">
           <img
             src="https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
-            alt={userId}
+            alt={comment.userId.name}
           />
         </div>
         <div className="comment__list-content">
           <div className="comment__profile">
-            <h3>{userId}</h3>
+            <h3>{comment.userId.name}</h3>
             <div className="comment__profile-date">
-              {dateFormatter(createdAt)}
+              {dateFormatter(comment.createdAt)}
             </div>
           </div>
           <div className="comment__list-comment">
-            <p className={`${large && !readMore && 'hide'}`}>{contents}</p>
-            <textarea ref={pRef} value={contents} readOnly />
+            {isEditing ? (
+              <form onSubmit={handleEditSubmit}>
+                <textarea
+                  className="comment__list-edit"
+                  ref={editRef}
+                  onInput={handleInput}
+                  defaultValue={comment.contents}
+                  rows={1}
+                />
+                <div className="comment__list-btn-box">
+                  <button type="submit">Edit</button>
+                  <button type="button" onClick={() => setIsEditing(false)}>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <>
+                <p className={`${large && !readMore && 'hide'}`}>
+                  {comment.contents}
+                </p>
+                <textarea
+                  className="display-none"
+                  ref={textRef}
+                  value={comment.contents}
+                  readOnly
+                />
+              </>
+            )}
           </div>
-          {large && (
-            <button className="comment__list-readmore" onClick={handleRead}>
+          {hasEdited && <div className="comment__list-edited">(edited)</div>}
+          {!isEditing && large && (
+            <button
+              className="comment__list-readmore"
+              onClick={() => setReadMore((prev) => !prev)}
+            >
               {readMore ? 'Show less' : 'Read more'}
             </button>
           )}
-          <CommentOption user={user} userId={userId} like_count={like_count} />
+          <CommentOption
+            user={user}
+            comment={comment}
+            eventObj={eventObj}
+            setIsEditing={setIsEditing}
+          />
         </div>
       </section>
     </>
   );
 }
 
-function CommentOption({ user, userId, like_count }) {
-  let option = { like_count };
-  if (user) {
-    option.myComment = userId === user._id;
-  }
+function CommentOption({ comment, user, eventObj, setIsEditing }) {
+  const [modalOn, setModalOn] = useState(false);
+  let hasLike = comment.likes.find((item) => item.userId === user?._id);
 
-  const [hasLike, setHasLike] = useState(false);
-  function handleLike() {
-    setHasLike((prev) => !prev);
-  }
   return (
-    <div className="comment__option">
-      <div className="comment__option-item">
-        {/* LIKE */}
-        <button onClick={handleLike} title="like comment">
-          {hasLike ? <LikeIcon fill={true} /> : <LikeIcon fill={false} />}
-        </button>
-        {hasLike ? like_count + 1 : like_count}
+    <>
+      <div className="comment__option">
+        <div className="comment__option-item">
+          {/* LIKE */}
+          <button
+            onClick={() => eventObj.handleLike(comment._id)}
+            title="like comment"
+          >
+            {hasLike ? <LikeIcon fill={true} /> : <LikeIcon fill={false} />}
+          </button>
+          {comment.totalLike}
+        </div>
+        {comment.userId._id === user?._id && (
+          <>
+            {/* EDIT */}
+            <div className="comment__option-item">
+              <button
+                title="edit comment"
+                onClick={() => setIsEditing((prev) => !prev)}
+              >
+                <EditIcon />
+              </button>
+            </div>
+            {/* DELETE */}
+            <div className="comment__option-item">
+              <button title="delete comment" onClick={() => setModalOn(true)}>
+                <DeleteIcon />
+              </button>
+            </div>
+          </>
+        )}
       </div>
-      {option.myComment && (
-        <>
-          {/* EDIT */}
-          <div className="comment__option-item">
-            <button title="edit comment">
-              <EditIcon />
-            </button>
+      {modalOn && (
+        <Modal setModalOn={setModalOn}>
+          <div className="modal__title">
+            Would you like to <span>delete</span> this comment?
           </div>
-          {/* DELETE */}
-          <div className="comment__option-item">
-            <button title="delete comment">
-              <DeleteIcon />
+          <div className="modal__btn-box">
+            <button
+              className="modal__btn modal__btn--warn"
+              onClick={() => {
+                eventObj.handleDelete(comment._id);
+                setModalOn(false);
+              }}
+            >
+              Delete
             </button>
+            <button onClick={() => setModalOn(false)}>Cancel</button>
           </div>
-        </>
+        </Modal>
       )}
-    </div>
+    </>
   );
 }
 

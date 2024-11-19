@@ -34,10 +34,29 @@ export const createComment = createAsyncThunk(
 
 export const deleteComment = createAsyncThunk(
   'comments/deleteComment',
-  async (articleId, { dispatch, rejectWithValue }) => {
+  async ({ articleId, commentId }, { dispatch, rejectWithValue }) => {
+    console.log(articleId, commentId);
     try {
-      const response = await api.post('/comments', { articleId });
-      console.log(response.data);
+      const response = await api.delete(`/comments/${commentId}`);
+      dispatch(getComments(articleId));
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
+export const updateComment = createAsyncThunk(
+  'comments/updateComment',
+  async (
+    { articleId, commentId, contents, likeRequest },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      const response = await api.put(`/comments/${commentId}`, {
+        contents,
+        likeRequest,
+      });
       dispatch(getComments(articleId));
       return response.data;
     } catch (error) {
@@ -68,7 +87,7 @@ const commentSlice = createSlice({
       .addCase(getComments.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
-        state.commentList = action.payload.commentList;
+        state.commentList = action.payload.commentList.reverse();
       })
       .addCase(getComments.rejected, (state, action) => {
         state.loading = false;

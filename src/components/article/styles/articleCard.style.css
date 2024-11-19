@@ -4,7 +4,7 @@
   gap: 1em;
 }
 .article__card-text:hover h2,
-.article__card .image-container:hover ~ .card-content h2 {
+.article__card .image-container:hover ~ .article__card-content h2 {
   text-decoration: underline;
 }
 .article__card h2 {

@@ -1,25 +1,23 @@
-import axios from "axios";
+import axios from 'axios';
 
-const BACKEND_URL = `${process.env.REACT_APP_BACKEND_URL}/api`
-const JWT = sessionStorage.getItem("token")
+const BACKEND_URL = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const JWT = sessionStorage.getItem('token');
 
 const api = axios.create({
   baseURL: BACKEND_URL,
   headers: {
-    "Content-Type": "application/json",
-    authorization: "Bearer " + JWT,
+    'Content-Type': 'application/json',
+    authorization: 'Bearer ' + JWT,
   },
 });
 
 api.interceptors.request.use(
   (request) => {
-    if (JWT) {
-      request.headers.authorization = `Bearer ${JWT}`;
-    }
+    request.headers.authorization = `Bearer ${sessionStorage.getItem('token')}`;
     return request;
   },
   function (error) {
-    console.log("REQUEST ERROR", error);
+    console.log('REQUEST ERROR', error);
   }
 );
 
@@ -29,7 +27,7 @@ api.interceptors.response.use(
   },
   function (error) {
     error = error.response.data;
-    console.log("RESPONSE ERROR", error);
+    console.log('RESPONSE ERROR', error);
     return Promise.reject(error);
   }
 );
