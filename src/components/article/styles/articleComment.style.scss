@@ -152,6 +152,20 @@
     resize: none;
   }
 
+  &-btn-box {
+    display: flex;
+    gap: 0.5em;
+    button {
+      margin-left: 0;
+      padding: 0.5em;
+    }
+  }
+
+  &-edited {
+    font-size: 0.9em;
+    color: var(--clr-font-lgt);
+  }
+
   &-readmore {
     font-weight: bold;
     margin-right: auto;

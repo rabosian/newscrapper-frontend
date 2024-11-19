@@ -133,6 +133,8 @@ function CommentCard({ comment, user, eventObj }) {
   const [readMore, setReadMore] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
+  const hasEdited = comment.createdAt !== comment.updatedAt;
+
   // 댓글 줄 횟수 계산
   useEffect(() => {
     if (textRef.current) {
@@ -147,6 +149,7 @@ function CommentCard({ comment, user, eventObj }) {
   useEffect(() => {
     if (isEditing) {
       handleInput();
+      editRef.current.focus();
     }
   }, [isEditing]);
 
@@ -201,7 +204,7 @@ function CommentCard({ comment, user, eventObj }) {
                   defaultValue={comment.contents}
                   rows={1}
                 />
-                <div>
+                <div className="comment__list-btn-box">
                   <button type="submit">Edit</button>
                   <button type="button" onClick={() => setIsEditing(false)}>
                     Cancel
@@ -222,6 +225,7 @@ function CommentCard({ comment, user, eventObj }) {
               </>
             )}
           </div>
+          {hasEdited && <div className="comment__list-edited">(edited)</div>}
           {!isEditing && large && (
             <button
               className="comment__list-readmore"
