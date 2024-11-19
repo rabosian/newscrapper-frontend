@@ -3,8 +3,8 @@ import api from '../../utils/api';
 
 // 필요한 API들
 // 1. signup      done
-// 2. loginWithEmail
-// 3. loginWithToken
+// 2. loginWithEmail done
+// 3. loginWithToken done
 // 4. googleLogin done
 // 5. logout      done
 
@@ -58,6 +58,7 @@ export const loginWithGoogle = createAsyncThunk(
     try {
       const response = await api.post('/auth/google', { credential });
       sessionStorage.setItem('token', response.data.token);
+      // console.log('userData', response.data.user);
       return response.data.user;
     } catch (error) {
       return rejectWithValue(

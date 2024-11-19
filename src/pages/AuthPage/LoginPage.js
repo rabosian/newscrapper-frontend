@@ -29,9 +29,10 @@ const LoginPage = () => {
     // 로그인 로직이 준비가 되면 활성화
     dispatch(loginWithEmail(items));
   }
+
   const handleGoogleLogin = async (googleData) => {
     //login with Google
-    // console.log('google', googleData);
+    // console.log('googleData', googleData);
 
     // 구글 로그인 문제시 이걸 실행
     // dispatch(loginWithGoogle(googleData.credential));
