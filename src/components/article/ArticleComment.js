@@ -18,6 +18,7 @@ function ArticleComment({ articleId, commentRef }) {
   const [loginError, setLoginError] = useState(null);
   const { error, commentList } = useSelector((store) => store.comments);
 
+  // event handler method
   const eventObj = {
     handleLike: (commentId) => {
       if (!user) {
@@ -27,7 +28,10 @@ function ArticleComment({ articleId, commentRef }) {
       const payload = { articleId, commentId, likeRequest: true };
       dispatch(updateComment(payload));
     },
-    handleEdit: (commentId) => {},
+    handleEdit: ({ commentId, contents }) => {
+      const payload = { articleId, commentId, contents };
+      dispatch(updateComment(payload));
+    },
     handleDelete: (commentId) => {
       dispatch(deleteComment({ commentId, articleId }));
     },
@@ -36,9 +40,9 @@ function ArticleComment({ articleId, commentRef }) {
   return (
     <div className="comment" ref={commentRef}>
       <span style={{ color: 'red' }}>{loginError}</span>
-      {/* user */}
+      {/* user write comment */}
       {user && <CommentUser articleId={articleId} user={user} />}
-      {/* others */}
+      {/* comment lists */}
       <div className="comment__list">
         {!error &&
           commentList.map((item) => (
@@ -123,22 +127,55 @@ function CommentUser({ articleId, user }) {
 }
 
 function CommentCard({ comment, user, eventObj }) {
-  const pRef = useRef();
+  const textRef = useRef();
+  const editRef = useRef();
   const [large, setLarge] = useState(false);
   const [readMore, setReadMore] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const hasEdited = comment.createdAt !== comment.updatedAt;
 
   // 댓글 줄 횟수 계산
   useEffect(() => {
-    if (pRef.current) {
-      const lineCount = pRef.current.value.split('\n').length;
+    if (textRef.current) {
+      const lineCount = textRef.current.value.split('\n').length;
       if (lineCount > 2) {
         setLarge(true);
       }
     }
-  }, [pRef.current]);
+  }, [textRef.current]);
 
-  function handleRead() {
-    setReadMore((prev) => !prev);
+  // edit 눌렀을시에 textarea 초기 높이 수정하기
+  useEffect(() => {
+    if (isEditing) {
+      handleInput();
+      editRef.current.focus();
+    }
+  }, [isEditing]);
+
+  // textarea 사이즈 계산
+  function handleInput() {
+    const textarea = editRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight + 1}px`;
+    }
+  }
+
+  // 댓글 수정하기
+  function handleEditSubmit(e) {
+    e.preventDefault();
+    if (!editRef.current.value) {
+      setIsEditing(false);
+      setReadMore(true);
+      return;
+    }
+    eventObj.handleEdit({
+      commentId: comment._id,
+      contents: editRef.current.value,
+    });
+    setIsEditing(false);
+    setReadMore(true);
   }
 
   return (
@@ -158,24 +195,58 @@ function CommentCard({ comment, user, eventObj }) {
             </div>
           </div>
           <div className="comment__list-comment">
-            <p className={`${large && !readMore && 'hide'}`}>
-              {comment.contents}
-            </p>
-            <textarea ref={pRef} value={comment.contents} readOnly />
+            {isEditing ? (
+              <form onSubmit={handleEditSubmit}>
+                <textarea
+                  className="comment__list-edit"
+                  ref={editRef}
+                  onInput={handleInput}
+                  defaultValue={comment.contents}
+                  rows={1}
+                />
+                <div className="comment__list-btn-box">
+                  <button type="submit">Edit</button>
+                  <button type="button" onClick={() => setIsEditing(false)}>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <>
+                <p className={`${large && !readMore && 'hide'}`}>
+                  {comment.contents}
+                </p>
+                <textarea
+                  className="display-none"
+                  ref={textRef}
+                  value={comment.contents}
+                  readOnly
+                />
+              </>
+            )}
           </div>
-          {large && (
-            <button className="comment__list-readmore" onClick={handleRead}>
+          {hasEdited && <div className="comment__list-edited">(edited)</div>}
+          {!isEditing && large && (
+            <button
+              className="comment__list-readmore"
+              onClick={() => setReadMore((prev) => !prev)}
+            >
               {readMore ? 'Show less' : 'Read more'}
             </button>
           )}
-          <CommentOption user={user} comment={comment} eventObj={eventObj} />
+          <CommentOption
+            user={user}
+            comment={comment}
+            eventObj={eventObj}
+            setIsEditing={setIsEditing}
+          />
         </div>
       </section>
     </>
   );
 }
 
-function CommentOption({ comment, user, eventObj, handleEdit }) {
+function CommentOption({ comment, user, eventObj, setIsEditing }) {
   const [modalOn, setModalOn] = useState(false);
   let hasLike = comment.likes.find((item) => item.userId === user?._id);
 
@@ -196,7 +267,10 @@ function CommentOption({ comment, user, eventObj, handleEdit }) {
           <>
             {/* EDIT */}
             <div className="comment__option-item">
-              <button title="edit comment" onClick={handleEdit}>
+              <button
+                title="edit comment"
+                onClick={() => setIsEditing((prev) => !prev)}
+              >
                 <EditIcon />
               </button>
             </div>

@@ -38,7 +38,6 @@ export const deleteComment = createAsyncThunk(
     console.log(articleId, commentId);
     try {
       const response = await api.delete(`/comments/${commentId}`);
-      console.log(response.data);
       dispatch(getComments(articleId));
       return response.data;
     } catch (error) {
@@ -48,7 +47,7 @@ export const deleteComment = createAsyncThunk(
 );
 
 export const updateComment = createAsyncThunk(
-  'comments/deleteComment',
+  'comments/updateComment',
   async (
     { articleId, commentId, contents, likeRequest },
     { dispatch, rejectWithValue }
