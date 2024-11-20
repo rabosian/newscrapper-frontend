@@ -5,6 +5,8 @@ import {
   getArticles,
   getArticlesByCategory,
   setSelectedArticle,
+  setSelectedCategory,
+  updateArticleViews
 } from '../../features/article/articleSlice';
 import { addFavoriteArticle } from '../../features/favorite/favoriteSlice';
 import ArticleCard from './ArticleCard';
@@ -22,10 +24,12 @@ function ArticleGrid() {
 
   useEffect(() => {
     dispatch(getArticlesByCategory({ category }));
+    dispatch(setSelectedCategory(category))
   }, [query]);
 
   function handleOpen(item) {
     dispatch(setSelectedArticle(item));
+    dispatch(updateArticleViews(item._id))
   }
 
   function handleClick(articleId) {

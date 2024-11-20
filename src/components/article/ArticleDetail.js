@@ -137,7 +137,7 @@ function ModalStats({ views, comments, shares, published }) {
       <div className="article__detail-stats">
         <button>
           <ViewIcon />
-          {views?.length || 0}
+          {views || 0}
         </button>
         <button>
           <CommentIcon />
