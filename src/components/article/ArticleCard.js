@@ -43,7 +43,7 @@ function CardStats({ item, handleOpen }) {
     <div className="article__card-stats">
       <button onClick={() => handleOpen(item)}>
         <ViewIcon />
-        {item.views?.length || 0}
+        {item.views || 0}
       </button>
       <button onClick={() => handleOpen(item)}>
         <CommentIcon />
