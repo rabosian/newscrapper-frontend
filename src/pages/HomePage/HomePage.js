@@ -43,7 +43,6 @@ function HomePage() {
 function HomeAside({ categories }) {
   return (
     <aside className="home__aside">
-      <div className="home__top-height"></div>
       <div className="home__aside-sticky">
         <div className="home__aside-box">
           <div className="home__aside-profile">
