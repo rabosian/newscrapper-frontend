@@ -15,14 +15,16 @@ import Modal from '../../composition/Modal';
 function ArticleComment({ articleId, commentRef }) {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user.user);
-  const [loginError, setLoginError] = useState(null);
+  const [loginError, setLoginError] = useState(
+    user ? null : '* You need to log in to comment'
+  );
   const { error, commentList } = useSelector((store) => store.comments);
 
   // event handler method
   const eventObj = {
     handleLike: (commentId) => {
       if (!user) {
-        setLoginError('Log in to access the comment feature');
+        setLoginError('* Log in to access the comment feature');
         return;
       }
       const payload = { articleId, commentId, likeRequest: true };
@@ -223,7 +225,9 @@ function CommentCard({ comment, user, eventObj }) {
               </>
             )}
           </div>
-          {comment.isEdited && <div className="comment__list-edited">(edited)</div>}
+          {comment.isEdited && (
+            <div className="comment__list-edited">(edited)</div>
+          )}
           {!isEditing && large && (
             <button
               className="comment__list-readmore"

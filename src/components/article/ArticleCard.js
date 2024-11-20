@@ -5,9 +5,15 @@ import ViewIcon from '../../assets/icons/ViewIcon';
 import CommentIcon from '../../assets/icons/CommentIcon';
 import ShareIcon from '../../assets/icons/ShareIcon';
 import LikeIcon from '../../assets/icons/LikeIcon';
+import { useSelector } from 'react-redux';
+import StarIcon from '../../assets/icons/StarIcon';
+import HeartIcon from '../../assets/icons/HeartIcon';
 
-function ArticleCard({ item, handleOpen, handleClick, isFavorite }) {
+function ArticleCard({ item, handleOpen, handleFavorite }) {
   const [published, setPublished] = useState(null);
+
+  const favoriteList = useSelector((state) => state.favorite.articleList);
+  const isFavorite = favoriteList.find((favorite) => favorite._id === item._id);
 
   useEffect(() => {
     if (item) {
@@ -15,6 +21,13 @@ function ArticleCard({ item, handleOpen, handleClick, isFavorite }) {
       setPublished(temp);
     }
   }, [item]);
+
+  function handleStar(e) {
+    // to prevent bubbling
+    e.stopPropagation();
+
+    handleFavorite({ isFavorite, articleId: item });
+  }
 
   return (
     <section className="article__card">
@@ -24,6 +37,9 @@ function ArticleCard({ item, handleOpen, handleClick, isFavorite }) {
         ) : (
           <div className="no-image"></div>
         )}
+        <button onClick={handleStar} className="article__detail-fav">
+          <HeartIcon isActive={isFavorite} />
+        </button>
       </div>
       <div className="article__card-content">
         <div className="article__card-text" onClick={() => handleOpen(item)}>
@@ -35,7 +51,7 @@ function ArticleCard({ item, handleOpen, handleClick, isFavorite }) {
           <CardStats
             item={item}
             handleOpen={handleOpen}
-            handleClick={handleClick}
+            handleFavorite={handleFavorite}
             isFavorite={isFavorite}
           />
         </div>
@@ -44,7 +60,7 @@ function ArticleCard({ item, handleOpen, handleClick, isFavorite }) {
   );
 }
 
-function CardStats({ item, handleOpen, handleClick, isFavorite }) {
+function CardStats({ item, handleOpen, handleFavorite, isFavorite }) {
   return (
     <div className="article__card-stats">
       <button onClick={() => handleOpen(item)}>
@@ -55,13 +71,10 @@ function CardStats({ item, handleOpen, handleClick, isFavorite }) {
         <CommentIcon />
         {item.comments?.length || 0}
       </button>
-      <button onClick={() => handleOpen(item)}>
+      {/* <button onClick={() => handleOpen(item)}>
         <ShareIcon />
         {item.shares?.length || 0}
-      </button>
-      <button onClick={() => handleClick(item)}>
-        <LikeIcon fill={isFavorite} />
-      </button>
+      </button> */}
     </div>
   );
 }

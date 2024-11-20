@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  addFavoriteArticle,
   deleteFavoriteArticle,
   getFavoriteArticles,
   setSelectedArticle,
@@ -27,6 +28,14 @@ function FavoritePage() {
     dispatch(deleteFavoriteArticle({ articleId: item._id }));
   }
 
+  function handleFavorite({ isFavorite, articleId }) {
+    if (isFavorite) {
+      dispatch(deleteFavoriteArticle({ articleId: articleId._id }));
+    } else {
+      dispatch(addFavoriteArticle({ articleId: articleId._id }));
+    }
+  }
+
   if (favoriteList.length === 0)
     return (
       <EmptyItem title={'No Favorites Yet'} content={'Add your favorites!'} />
@@ -47,7 +56,7 @@ function FavoritePage() {
                   item={item}
                   key={item.url}
                   handleOpen={handleOpen}
-                  handleClick={handleClick}
+                  handleFavorite={handleFavorite}
                   isFavorite={true}
                 />
               );
