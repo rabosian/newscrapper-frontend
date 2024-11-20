@@ -26,6 +26,7 @@
 .footer__link {
   display: flex;
   gap: 1em;
+  flex-wrap: wrap;
 }
 .footer__link a {
   color: var(--clr-font);
