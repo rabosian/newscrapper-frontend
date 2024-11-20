@@ -6,6 +6,7 @@ import api from '../../utils/api';
 // 2. getArticlesByCategory - 카테고리 선택 시 보여줄 뉴스들
 // 3. saveAndUpdateArticles - 유저의 인터랙션이 있을 시 (댓글/라이크) DB에 저장하고 댓글, 라이크 저장/업데이트
 
+// 더이상 사용하지 않는 함수??? -> 제거
 export const getArticles = createAsyncThunk(
   'articles/getArticles',
   async (_, { rejectWithValue }) => {
@@ -23,6 +24,7 @@ export const getArticlesByCategory = createAsyncThunk(
   async ({ category }, { rejectWithValue }) => {
     try {
       const response = await api.get('/articles', { params: { category } });
+      console.log('getArticlesByCategory:', response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);

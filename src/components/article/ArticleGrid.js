@@ -9,6 +9,7 @@ import {
 } from '../../features/article/articleSlice';
 import {
   addFavoriteArticle,
+  deleteFavoriteArticle,
   getFavoriteArticles,
 } from '../../features/favorite/favoriteSlice';
 import ArticleCard from './ArticleCard';
@@ -21,9 +22,8 @@ function ArticleGrid() {
   const { articleList, selectedCategory } = useSelector(
     (state) => state.article
   );
-  const favoriteList = useSelector((state) => state.favorite.articleList);
-  const [query] = useSearchParams();
 
+  const [query] = useSearchParams();
   let category = query.get('category') || 'business';
   if (!categoryList.includes(category)) category = 'business';
 
@@ -45,8 +45,12 @@ function ArticleGrid() {
     dispatch(setSelectedArticle({ ...item, views: item.views + 1 }));
   }
 
-  function handleClick(articleId) {
-    dispatch(addFavoriteArticle({ articleId: articleId._id }));
+  function handleFavorite({ isFavorite, articleId }) {
+    if (isFavorite) {
+      dispatch(deleteFavoriteArticle({ articleId: articleId._id }));
+    } else {
+      dispatch(addFavoriteArticle({ articleId: articleId._id }));
+    }
   }
 
   if (articleList.length === 0)
@@ -75,10 +79,7 @@ function ArticleGrid() {
                 item={item}
                 key={item.url}
                 handleOpen={handleOpen}
-                handleClick={handleClick}
-                isFavorite={favoriteList.find(
-                  (favorite) => favorite._id === item._id
-                )}
+                handleFavorite={handleFavorite}
               />
             );
           })}

@@ -12,6 +12,7 @@ export const getComments = createAsyncThunk(
     try {
       // GET에서 body를 지원하지 않기 때문에 query로 보냄.
       const response = await api.get('/comments', { params: { articleId } });
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);

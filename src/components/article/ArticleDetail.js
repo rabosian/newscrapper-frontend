@@ -11,7 +11,12 @@ import ViewIcon from '../../assets/icons/ViewIcon';
 import CommentIcon from '../../assets/icons/CommentIcon';
 import ShareIcon from '../../assets/icons/ShareIcon';
 import LikeIcon from '../../assets/icons/LikeIcon';
-import { addFavoriteArticle } from '../../features/favorite/favoriteSlice';
+import {
+  addFavoriteArticle,
+  deleteFavoriteArticle,
+} from '../../features/favorite/favoriteSlice';
+import StarIcon from '../../assets/icons/StarIcon';
+import HeartIcon from '../../assets/icons/HeartIcon';
 
 const body = document.getElementsByTagName('body')[0];
 
@@ -19,6 +24,7 @@ function ArticleDetail({ article, isFavorite }) {
   const dispatch = useDispatch();
   const commentRef = useRef();
   const [commentOn, setCommentOn] = useState(false);
+  const [favOn, setFavOn] = useState(false);
 
   useEffect(() => {
     dispatch(getComments(article._id));
@@ -51,8 +57,12 @@ function ArticleDetail({ article, isFavorite }) {
     setCommentOn((prev) => !prev);
   }
 
-  function handleClick() {
-    dispatch(addFavoriteArticle({ articleId: article._id }));
+  function handleFavorite({ isFavorite }) {
+    if (isFavorite) {
+      dispatch(deleteFavoriteArticle({ articleId: article._id }));
+    } else {
+      dispatch(addFavoriteArticle({ articleId: article._id }));
+    }
   }
 
   return (
@@ -69,7 +79,7 @@ function ArticleDetail({ article, isFavorite }) {
             </div>
             <ArticleStats
               {...article}
-              handleClick={handleClick}
+              handleFavorite={handleFavorite}
               isFavorite={isFavorite}
             />
             <div
@@ -101,7 +111,7 @@ function ArticleStats({
   comments,
   shares,
   isFavorite,
-  handleClick,
+  handleFavorite,
 }) {
   const published = dateFormatter(publishedAt);
   return (
@@ -109,14 +119,18 @@ function ArticleStats({
       {/* Image */}
       <div className="image-container">
         <img src={urlToImage} alt={title} />
+        <button
+          onClick={() => handleFavorite({ isFavorite })}
+          className="article__detail-fav"
+        >
+          <HeartIcon isActive={isFavorite} />
+        </button>
       </div>
       <ModalStats
         views={views}
         comments={comments}
         shares={shares}
         published={published}
-        isFavorite={isFavorite}
-        handleClick={handleClick}
       />
       {/* Information */}
       <div className="article__detail-info">
@@ -144,14 +158,7 @@ function ArticleStats({
   );
 }
 
-function ModalStats({
-  views,
-  comments,
-  shares,
-  published,
-  isFavorite,
-  handleClick,
-}) {
+function ModalStats({ views, comments, shares, published }) {
   return (
     <div className="article__detail-details">
       <div className="article__detail-date">Posted {published}</div>
@@ -167,9 +174,6 @@ function ModalStats({
         <button>
           <ShareIcon />
           {shares?.length || 0}
-        </button>
-        <button onClick={() => handleClick()}>
-          <LikeIcon fill={isFavorite} />
         </button>
       </div>
     </div>
