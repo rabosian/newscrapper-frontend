@@ -1,6 +1,6 @@
 import React from 'react';
 import './home.style.css';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useSearchParams } from 'react-router-dom';
 import ArticleGrid from '../../components/article/ArticleGrid';
 import { useSelector } from 'react-redux';
 import { categoryList } from '../../utils/categoryList';
@@ -18,6 +18,11 @@ function HomePage() {
 
 function HomeAside({ categoryList }) {
   const { user } = useSelector((store) => store.user);
+
+  const [query] = useSearchParams();
+
+  let category = query.get('category') || 'business';
+  if (!categoryList.includes(category)) category = 'business';
 
   return (
     <aside className="home__aside">
@@ -45,7 +50,9 @@ function HomeAside({ categoryList }) {
             <div className="home__aside-content">
               {categoryList.map((item) => (
                 <Link
-                  className="home__aside-item"
+                  className={`home__aside-item ${
+                    category === item && 'home__aside-item--active'
+                  }`}
                   to={`/?category=${item}`}
                   key={item}
                 >

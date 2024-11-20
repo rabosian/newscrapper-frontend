@@ -128,8 +128,12 @@
     text-transform: capitalize;
     color: var(--clr-font);
     margin-right: auto;
-    &:hover {
-      color: var(--clr-font-drk);
+    transition: padding 0.2s ease-in-out;
+
+    &--active {
+      padding-left: 1em;
+      font-weight: bold;
+      color: rgb(7, 98, 197) !important;
     }
   }
 }

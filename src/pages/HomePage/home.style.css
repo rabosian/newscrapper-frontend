@@ -89,9 +89,12 @@
   text-transform: capitalize;
   color: var(--clr-font);
   margin-right: auto;
+  transition: padding 0.2s ease-in-out;
 }
-.home__aside-item:hover {
-  color: var(--clr-font-drk);
+.home__aside-item--active {
+  padding-left: 1em;
+  font-weight: bold;
+  color: rgb(7, 98, 197) !important;
 }
 
 @media (max-width: 1125px) {

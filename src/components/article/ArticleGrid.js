@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './styles/articleGrid.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  getArticles,
   getArticlesByCategory,
   setSelectedArticle,
-  setSelectedCategory,
+  // setSelectedCategory,
   updateArticleViews,
 } from '../../features/article/articleSlice';
 import {
@@ -19,7 +18,9 @@ import { categoryList } from '../../utils/categoryList';
 
 function ArticleGrid() {
   const dispatch = useDispatch();
-  const articleList = useSelector((state) => state.article.articleList);
+  const { articleList, selectedCategory } = useSelector(
+    (state) => state.article
+  );
   const favoriteList = useSelector((state) => state.favorite.articleList);
   const [query] = useSearchParams();
 
@@ -28,7 +29,7 @@ function ArticleGrid() {
 
   useEffect(() => {
     dispatch(getArticlesByCategory({ category }));
-    dispatch(setSelectedCategory(category));
+    // dispatch(setSelectedCategory(category));
   }, [query]);
 
   useEffect(() => {
@@ -39,9 +40,9 @@ function ArticleGrid() {
     window.scrollTo(0, 0);
   }, [category]);
 
-  function handleOpen(item) {
-    dispatch(setSelectedArticle(item));
+  async function handleOpen(item) {
     dispatch(updateArticleViews(item._id));
+    dispatch(setSelectedArticle({ ...item, views: item.views + 1 }));
   }
 
   function handleClick(articleId) {
@@ -61,13 +62,11 @@ function ArticleGrid() {
   return (
     <article className="article">
       <header className="article__header">
-        {/* store -> 카테고리에서 이름 가져오기 */}
         <h1>
           <span>{category}</span> Today
         </h1>
       </header>
       <div className="article__content">
-        {/* MAP -> GRID */}
         {articleList
           .filter(({ title }) => title !== '[Removed]')
           .map((item) => {
