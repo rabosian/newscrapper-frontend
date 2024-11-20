@@ -133,8 +133,6 @@ function CommentCard({ comment, user, eventObj }) {
   const [readMore, setReadMore] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  const hasEdited = comment.createdAt !== comment.updatedAt;
-
   // 댓글 줄 횟수 계산
   useEffect(() => {
     if (textRef.current) {
@@ -225,7 +223,7 @@ function CommentCard({ comment, user, eventObj }) {
               </>
             )}
           </div>
-          {hasEdited && <div className="comment__list-edited">(edited)</div>}
+          {comment.isEdited && <div className="comment__list-edited">(edited)</div>}
           {!isEditing && large && (
             <button
               className="comment__list-readmore"
