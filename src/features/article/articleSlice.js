@@ -13,7 +13,7 @@ export const getArticles = createAsyncThunk(
       const response = await api.get('/articles');
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.error);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -25,7 +25,7 @@ export const getArticlesByCategory = createAsyncThunk(
       const response = await api.get('/articles', { params: { category } });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.error);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
@@ -53,6 +53,7 @@ const articleSlice = createSlice({
     selectedArticle: null,
     selectedCategory: 'business',
     totalArticleCount: 0,
+    totalPageNum: 1,
     loading: false,
     error: null,
     success: false,
@@ -80,7 +81,7 @@ const articleSlice = createSlice({
         state.loading = false;
         state.error = '';
         state.articleList = action.payload.articles;
-        state.totalArticleCount = action.payload.totalArticleCount;
+        state.totalPageNum = action.payload.totalPageNum;
       })
       .addCase(getArticles.rejected, (state, action) => {
         state.loading = false;
@@ -93,7 +94,7 @@ const articleSlice = createSlice({
         state.loading = false;
         state.error = '';
         state.articleList = action.payload.articles;
-        state.totalArticleCount = action.payload.totalArticleCount;
+        state.totalPageNum = action.payload.totalPageNum;
       })
       .addCase(getArticlesByCategory.rejected, (state, action) => {
         state.loading = false;

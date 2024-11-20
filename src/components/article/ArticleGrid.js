@@ -8,6 +8,7 @@ import {
   setSelectedCategory,
   updateArticleViews
 } from '../../features/article/articleSlice';
+import { addFavoriteArticle } from '../../features/favorite/favoriteSlice';
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
 import { useSearchParams } from 'react-router-dom';
@@ -31,7 +32,19 @@ function ArticleGrid() {
     dispatch(updateArticleViews(item._id))
   }
 
-  if (articleList.length === 0) return <EmptyItem />;
+  function handleClick(articleId) {
+    dispatch(addFavoriteArticle({ articleId: articleId._id }));
+  }
+
+  if (articleList.length === 0)
+    return (
+      <EmptyItem
+        title={'No News Yet'}
+        content={
+          "It seems we don't have any updates right now. Check back soon for more news!"
+        }
+      />
+    );
 
   return (
     <article className="article">
@@ -47,7 +60,12 @@ function ArticleGrid() {
           .filter(({ title }) => title !== '[Removed]')
           .map((item) => {
             return (
-              <ArticleCard item={item} key={item.url} handleOpen={handleOpen} />
+              <ArticleCard
+                item={item}
+                key={item.url}
+                handleOpen={handleOpen}
+                handleClick={handleClick}
+              />
             );
           })}
       </div>
