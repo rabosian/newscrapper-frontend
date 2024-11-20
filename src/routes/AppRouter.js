@@ -10,6 +10,7 @@ import PrivateRoute from './PrivateRoute';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import ArticleModal from '../components/article/ArticleModal';
+import NotFoundPage from '../pages/NotFoundPage/NotFoundPage';
 
 const AppRouter = () => {
   return (
@@ -23,6 +24,7 @@ const AppRouter = () => {
           <Route path="/myfavorite" element={<FavoritePage />} />
         </Route>
         <Route path="/category" element={<CategoryPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <ArticleModal />
       <Footer />
