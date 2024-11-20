@@ -26,7 +26,6 @@ function HomeAside({ categoryList }) {
 
   return (
     <aside className="home__aside">
-      <div className="home__top-height"></div>
       <div className="home__aside-sticky">
         <div className="home__aside-box">
           {user && (
