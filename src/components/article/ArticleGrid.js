@@ -8,7 +8,10 @@ import {
   setSelectedCategory,
   updateArticleViews
 } from '../../features/article/articleSlice';
-import { addFavoriteArticle } from '../../features/favorite/favoriteSlice';
+import {
+  addFavoriteArticle,
+  getFavoriteArticles,
+} from '../../features/favorite/favoriteSlice';
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
 import { useSearchParams } from 'react-router-dom';
@@ -17,6 +20,7 @@ import { categoryList } from '../../utils/categoryList';
 function ArticleGrid() {
   const dispatch = useDispatch();
   const articleList = useSelector((state) => state.article.articleList);
+  const favoriteList = useSelector((state) => state.favorite.articleList);
   const [query] = useSearchParams();
 
   let category = query.get('category') || 'business';
@@ -26,6 +30,10 @@ function ArticleGrid() {
     dispatch(getArticlesByCategory({ category }));
     dispatch(setSelectedCategory(category))
   }, [query]);
+
+  useEffect(() => {
+    dispatch(getFavoriteArticles());
+  }, []);
 
   function handleOpen(item) {
     dispatch(setSelectedArticle(item));
@@ -65,6 +73,9 @@ function ArticleGrid() {
                 key={item.url}
                 handleOpen={handleOpen}
                 handleClick={handleClick}
+                isFavorite={favoriteList.find(
+                  (favorite) => favorite._id === item._id
+                )}
               />
             );
           })}
