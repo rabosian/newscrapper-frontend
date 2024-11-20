@@ -32,14 +32,11 @@ export const getArticlesByCategory = createAsyncThunk(
 
 export const updateArticleViews = createAsyncThunk(
   'articles/updateArticleViews',
-  async (articleId, { dispatch, getState, rejectWithValue }) => {
+  async (articleId, { rejectWithValue }) => {
     try {
       const response = await api.put(`/articles/view/${articleId}`);
-      const state = getState();
-      const selectedCategory = state.article.selectedCategory;
-      
-      dispatch(getArticlesByCategory({ selectedCategory }));
-      return response.data;
+
+      return response.data.article._id;
     } catch (error) {
       return rejectWithValue(error.error);
     }
@@ -68,9 +65,9 @@ const articleSlice = createSlice({
     setClearSelectedArticle: (state) => {
       state.selectedArticle = null;
     },
-    setSelectedCategory: (state, action) => {
-      state.selectedCategory = action.payload;
-    },
+    // setSelectedCategory: (state, action) => {
+    //   state.selectedCategory = action.payload;
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -79,7 +76,7 @@ const articleSlice = createSlice({
       })
       .addCase(getArticles.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = '';
+        state.error = null;
         state.articleList = action.payload.articles;
         state.totalPageNum = action.payload.totalPageNum;
       })
@@ -92,11 +89,28 @@ const articleSlice = createSlice({
       })
       .addCase(getArticlesByCategory.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = '';
+        state.error = null;
         state.articleList = action.payload.articles;
         state.totalPageNum = action.payload.totalPageNum;
       })
       .addCase(getArticlesByCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateArticleViews.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(updateArticleViews.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.articleList.findIndex(
+          (item) => item._id === action.payload
+        );
+        if (index !== -1) {
+          state.articleList[index].views += 1;
+        }
+        state.error = null;
+      })
+      .addCase(updateArticleViews.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
@@ -104,5 +118,8 @@ const articleSlice = createSlice({
 });
 
 export default articleSlice.reducer;
-export const { setSelectedArticle, setClearSelectedArticle, setSelectedCategory } =
-  articleSlice.actions;
+export const {
+  setSelectedArticle,
+  setClearSelectedArticle,
+  // setSelectedCategory,
+} = articleSlice.actions;

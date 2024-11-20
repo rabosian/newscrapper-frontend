@@ -5,11 +5,19 @@
   align-items: center;
   box-shadow: 0px 2px 4px -2px rgba(0, 0, 0, 0.1529411765);
   position: fixed;
+  gap: 0.5em;
   top: 0;
   left: 0;
   right: 0;
   background-color: var(--clr-bg);
   z-index: 99;
+}
+.navbar__menu {
+  display: none;
+  cursor: pointer;
+}
+.navbar__logo {
+  margin-right: auto;
 }
 .navbar .image-container {
   width: 160px;
@@ -42,4 +50,68 @@
   background-color: var(--clr-primary);
   color: #fff;
   border-radius: 4px;
+}
+
+.navbar__aside {
+  position: absolute;
+  top: 100%;
+  left: -100%;
+  height: 100vh;
+  width: 50%;
+  min-width: 15rem;
+  background-color: var(--clr-bg);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: left 0.3s linear;
+}
+.navbar__aside--active {
+  left: 0;
+}
+.navbar__aside h3 {
+  color: var(--clr-font-drk);
+  font-weight: bold;
+}
+.navbar__aside .line {
+  width: 100%;
+  height: 1px;
+  background-color: rgb(214, 214, 214);
+}
+.navbar__aside ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.navbar__aside-link {
+  text-transform: capitalize;
+  font-size: 1rem;
+  color: var(--clr-font);
+}
+.navbar__aside-link--active {
+  font-weight: bold;
+  color: var(--clr-font-drk);
+}
+.navbar__aside-close {
+  position: absolute;
+  right: 1rem;
+  cursor: pointer;
+}
+.navbar__aside-bg {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.446);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  z-index: -1;
+  cursor: pointer;
+}
+
+@media (max-width: 1125px) {
+  .navbar__menu {
+    display: flex;
+  }
 }/*# sourceMappingURL=navbar.style.css.map */
