@@ -143,3 +143,9 @@
     display: none;
   }
 }
+
+@media (max-width: 600px) {
+  .home {
+    padding-top: 3em;
+  }
+}

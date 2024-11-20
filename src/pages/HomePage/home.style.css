@@ -101,4 +101,9 @@
   .home__aside {
     display: none;
   }
+}
+@media (max-width: 600px) {
+  .home {
+    padding-top: 3em;
+  }
 }/*# sourceMappingURL=home.style.css.map */
