@@ -104,24 +104,26 @@ const Navbar = () => {
         <section
           className={`navbar__aside ${isMenuOn && 'navbar__aside--active'}`}
         >
-          <h3>Category</h3>
-          <div className="line"></div>
-          <ul>
-            {categoryList.map((item) => (
-              <li key={item} onClick={getMenuTrigger}>
-                <Link
-                  className={`navbar__aside-link ${
-                    category === item && 'navbar__aside-link--active'
-                  }`}
-                  to={`/?category=${item}`}
-                >
-                  {item}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="navbar__aside-close" onClick={getMenuTrigger}>
-            <ExitIcon />
+          <div className="navbar__aside-content">
+            <h3>Category</h3>
+            <div className="line"></div>
+            <ul>
+              {categoryList.map((item) => (
+                <li key={item} onClick={getMenuTrigger}>
+                  <Link
+                    className={`navbar__aside-link ${
+                      category === item && 'navbar__aside-link--active'
+                    }`}
+                    to={`/?category=${item}`}
+                  >
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="navbar__aside-close" onClick={getMenuTrigger}>
+              <ExitIcon />
+            </div>
           </div>
         </section>
         {isMenuOn && (
