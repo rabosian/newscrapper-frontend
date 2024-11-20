@@ -5,6 +5,8 @@ import {
   getArticles,
   getArticlesByCategory,
   setSelectedArticle,
+  setSelectedCategory,
+  updateArticleViews
 } from '../../features/article/articleSlice';
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
@@ -21,10 +23,12 @@ function ArticleGrid() {
 
   useEffect(() => {
     dispatch(getArticlesByCategory({ category }));
+    dispatch(setSelectedCategory(category))
   }, [query]);
 
   function handleOpen(item) {
     dispatch(setSelectedArticle(item));
+    dispatch(updateArticleViews(item._id))
   }
 
   if (articleList.length === 0) return <EmptyItem />;

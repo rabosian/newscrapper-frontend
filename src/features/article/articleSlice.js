@@ -30,11 +30,28 @@ export const getArticlesByCategory = createAsyncThunk(
   }
 );
 
+export const updateArticleViews = createAsyncThunk(
+  'articles/updateArticleViews',
+  async (articleId, { dispatch, getState, rejectWithValue }) => {
+    try {
+      const response = await api.put(`/articles/view/${articleId}`);
+      const state = getState();
+      const selectedCategory = state.article.selectedCategory;
+      
+      dispatch(getArticlesByCategory({ selectedCategory }));
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 const articleSlice = createSlice({
   name: 'articles',
   initialState: {
     articleList: [],
     selectedArticle: null,
+    selectedCategory: 'business',
     totalArticleCount: 0,
     loading: false,
     error: null,
@@ -49,6 +66,9 @@ const articleSlice = createSlice({
     },
     setClearSelectedArticle: (state) => {
       state.selectedArticle = null;
+    },
+    setSelectedCategory: (state, action) => {
+      state.selectedCategory = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -83,5 +103,5 @@ const articleSlice = createSlice({
 });
 
 export default articleSlice.reducer;
-export const { setSelectedArticle, setClearSelectedArticle } =
+export const { setSelectedArticle, setClearSelectedArticle, setSelectedCategory } =
   articleSlice.actions;
