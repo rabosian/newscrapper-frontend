@@ -6,7 +6,7 @@ import CommentIcon from '../../assets/icons/CommentIcon';
 import ShareIcon from '../../assets/icons/ShareIcon';
 import LikeIcon from '../../assets/icons/LikeIcon';
 
-function ArticleCard({ item, handleOpen, handleClick }) {
+function ArticleCard({ item, handleOpen, handleClick, isFavorite }) {
   const [published, setPublished] = useState(null);
 
   useEffect(() => {
@@ -36,6 +36,7 @@ function ArticleCard({ item, handleOpen, handleClick }) {
             item={item}
             handleOpen={handleOpen}
             handleClick={handleClick}
+            isFavorite={isFavorite}
           />
         </div>
       </div>
@@ -43,7 +44,7 @@ function ArticleCard({ item, handleOpen, handleClick }) {
   );
 }
 
-function CardStats({ item, handleOpen, handleClick }) {
+function CardStats({ item, handleOpen, handleClick, isFavorite }) {
   return (
     <div className="article__card-stats">
       <button onClick={() => handleOpen(item)}>
@@ -59,7 +60,7 @@ function CardStats({ item, handleOpen, handleClick }) {
         {item.shares?.length || 0}
       </button>
       <button onClick={() => handleClick(item)}>
-        <LikeIcon />
+        <LikeIcon fill={isFavorite} />
       </button>
     </div>
   );

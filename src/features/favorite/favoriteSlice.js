@@ -75,7 +75,7 @@ const favoriteSlice = createSlice({
         state.error = null;
         state.success = true;
         state.articleList = action.payload.articleList;
-        state.totalArticleCount = action.payload.articleList.length; //페이지네이션 넣으면 바꿔야함
+        state.totalArticleCount = action.payload.articleList.length;
       })
       .addCase(getFavoriteArticles.rejected, (state, action) => {
         state.loading = false;
@@ -94,6 +94,18 @@ const favoriteSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
+      })
+      .addCase(addFavoriteArticle.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(addFavoriteArticle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.success = true;
+      })
+      .addCase(addFavoriteArticle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

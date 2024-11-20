@@ -37,7 +37,6 @@ function FavoritePage() {
       <div className="wrapper">
         <article className="article">
           <header className="article__header">
-            {/* store -> 카테고리에서 이름 가져오기 */}
             <h1>My Favorites</h1>
           </header>
           <div className="article__content">
@@ -49,6 +48,7 @@ function FavoritePage() {
                   key={item.url}
                   handleOpen={handleOpen}
                   handleClick={handleClick}
+                  isFavorite={true}
                 />
               );
             })}
