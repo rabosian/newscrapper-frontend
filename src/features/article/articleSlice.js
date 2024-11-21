@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
+import { getFavoriteArticles } from '../favorite/favoriteSlice';
 
 // 필요한 API들
 // 1. getArticles - 처음 랜딩 시 보여줄 뉴스들
@@ -34,9 +35,10 @@ export const getArticlesByCategory = createAsyncThunk(
 
 export const updateArticleViews = createAsyncThunk(
   'articles/updateArticleViews',
-  async (articleId, { rejectWithValue }) => {
+  async (articleId, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(`/articles/view/${articleId}`);
+      dispatch(getFavoriteArticles());
 
       return response.data.article._id;
     } catch (error) {
