@@ -60,7 +60,6 @@ export const loginWithGoogle = createAsyncThunk(
     try {
       const response = await api.post('/auth/google', { credential });
       sessionStorage.setItem('token', response.data.token);
-      // console.log('userData', response.data.user);
       return response.data.user;
     } catch (error) {
       return rejectWithValue(

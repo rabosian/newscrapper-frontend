@@ -1,46 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './styles/articleGrid.style.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
-  getArticlesByCategory,
   setSelectedArticle,
   updateArticleViews,
 } from '../../features/article/articleSlice';
 import {
   addFavoriteArticle,
   deleteFavoriteArticle,
-  getFavoriteArticles,
 } from '../../features/favorite/favoriteSlice';
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
-import { useSearchParams } from 'react-router-dom';
-import { categoryList } from '../../utils/categoryList';
 
-function ArticleGrid() {
+function ArticleGrid({ category, articleList, totalPageNum, page }) {
   const dispatch = useDispatch();
-  const { articleList } = useSelector((state) => state.article);
 
-  const [query] = useSearchParams();
-  let category = query.get('category') || 'business';
-  if (!categoryList.includes(category)) category = 'business';
-
-  useEffect(() => {
-    dispatch(getArticlesByCategory({ category }));
-  }, [query]);
-
-  useEffect(() => {
-    dispatch(getFavoriteArticles());
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [category]);
-
+  // when the user opened the article
   async function handleOpen(item) {
     dispatch(updateArticleViews(item._id));
     dispatch(setSelectedArticle({ ...item, views: item.views + 1 }));
   }
 
+  // favorite trigger
   function handleFavorite({ isFavorite, articleId }) {
     if (isFavorite) {
       dispatch(deleteFavoriteArticle({ articleId: articleId._id }));
@@ -63,19 +44,25 @@ function ArticleGrid() {
     <article className="article">
       <header className="article__header">
         <h1>
-          <span>{category}</span> Today
+          <span>{category}</span>
         </h1>
       </header>
       <div className="article__content">
         {articleList
           .filter(({ title }) => title !== '[Removed]')
-          .map((item) => {
+          .map((item, idx) => {
+            let isLast = false;
+            if (articleList.length - 1 === idx) isLast = true;
             return (
               <ArticleCard
                 item={item}
-                key={item.url}
+                key={item._id}
                 handleOpen={handleOpen}
                 handleFavorite={handleFavorite}
+                isLast={isLast}
+                totalPageNum={totalPageNum}
+                page={page}
+                category={category}
               />
             );
           })}

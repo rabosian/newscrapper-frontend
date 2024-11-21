@@ -1,16 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './home.style.css';
 import { Link, NavLink, useSearchParams } from 'react-router-dom';
 import ArticleGrid from '../../components/article/ArticleGrid';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { categoryList } from '../../utils/categoryList';
+import {
+  clearArticle,
+  getArticlesByCategory,
+} from '../../features/article/articleSlice';
+import { getFavoriteArticles } from '../../features/favorite/favoriteSlice';
 
 function HomePage() {
+  const dispatch = useDispatch();
+
+  const [query] = useSearchParams();
+  let category = query.get('category') || 'business';
+  if (!categoryList.includes(category)) category = 'business';
+
+  useEffect(() => {
+    dispatch(getFavoriteArticles());
+  }, []);
+
+  useEffect(() => {
+    dispatch(getArticlesByCategory({ page: 1, category }));
+
+    return () => {
+      window.scrollTo(0, 0);
+      dispatch(clearArticle());
+    };
+  }, [query]);
+
+  const { articleList, totalPageNum, page } = useSelector(
+    (state) => state.article
+  );
+
   return (
     <main className="home">
       <HomeAside categoryList={categoryList} />
       <div className="wrapper">
-        <ArticleGrid />
+        <ArticleGrid
+          category={category}
+          articleList={articleList}
+          totalPageNum={totalPageNum}
+          page={page}
+        />
       </div>
     </main>
   );

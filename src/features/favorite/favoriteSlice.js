@@ -69,8 +69,19 @@ const favoriteSlice = createSlice({
     clearErrors: (state) => {
       state.error = null;
     },
-    setSelectedArticle: (state, action) => {
+    setSelectedArticleFavorite: (state, action) => {
       state.selectedArticle = action.payload;
+    },
+    setUpdatedCommentTotalFavorite: (state, action) => {
+      const idx = state.articleList.findIndex(
+        ({ _id }) => _id === action.payload.articleId
+      );
+      state.articleList[idx] = {
+        ...state.articleList[idx],
+        totalCommentCount:
+          state.articleList[idx].totalCommentCount + action.payload.increase,
+      };
+      state.selectedArticle = state.articleList[idx];
     },
   },
   extraReducers: (builder) => {
@@ -83,12 +94,13 @@ const favoriteSlice = createSlice({
         state.error = null;
         state.success = true;
 
-        state.articleList = action.payload.articleList.map((item) => {
-          item.totalCommentCount = item.comments.length;
-          return item;
-        });
+        state.articleList = action.payload.articleList
+          .map((item, idx) => {
+            item.totalCommentCount = item.comments.length;
+            return item;
+          })
+          .reverse();
 
-        state.articleList = action.payload.articleList;
         state.totalArticleCount = action.payload.articleList.length;
       })
       .addCase(getFavoriteArticles.rejected, (state, action) => {
@@ -125,4 +137,8 @@ const favoriteSlice = createSlice({
 });
 
 export default favoriteSlice.reducer;
-export const { clearFavorite, setSelectedArticle } = favoriteSlice.actions;
+export const {
+  clearFavorite,
+  setSelectedArticleFavorite,
+  setUpdatedCommentTotalFavorite,
+} = favoriteSlice.actions;
