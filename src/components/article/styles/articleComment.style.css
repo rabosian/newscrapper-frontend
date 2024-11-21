@@ -23,6 +23,7 @@
   width: 2em;
   height: 2em;
   flex-shrink: 0;
+  border-radius: 50%;
 }
 .comment__profile {
   display: flex;

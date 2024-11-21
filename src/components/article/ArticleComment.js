@@ -131,10 +131,7 @@ function CommentUser({ articleId, user }) {
     <>
       <div className="comment__user">
         <div className="image-container">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
-            alt="your profile pic"
-          />
+          <img src={user.picture} alt="your profile pic" />
         </div>
         <form
           onSubmit={handleSubmit}
@@ -223,10 +220,7 @@ function CommentCard({ comment, user, eventObj }) {
     <>
       <section className="comment__list-card" key={comment._id}>
         <div className="image-container">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/9385/9385289.png"
-            alt={comment.userId.name}
-          />
+          <img src={comment.userId.picture} alt={comment.userId.name} />
         </div>
         <div className="comment__list-content">
           <div className="comment__profile">

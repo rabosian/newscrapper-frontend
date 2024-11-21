@@ -69,7 +69,7 @@ function CardStats({ item, handleOpen, handleFavorite, isFavorite }) {
       </button>
       <button onClick={() => handleOpen(item)}>
         <CommentIcon />
-        {item.comments?.length || 0}
+        {item.totalCommentCount || 0}
       </button>
       {/* <button onClick={() => handleOpen(item)}>
         <ShareIcon />

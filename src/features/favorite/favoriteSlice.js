@@ -74,6 +74,12 @@ const favoriteSlice = createSlice({
         state.loading = false;
         state.error = null;
         state.success = true;
+
+        state.articleList = action.payload.articleList.map((item) => {
+          item.totalCommentCount = item.comments.length;
+          return item;
+        });
+
         state.articleList = action.payload.articleList;
         state.totalArticleCount = action.payload.articleList.length;
       })
