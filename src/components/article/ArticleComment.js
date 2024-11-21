@@ -5,12 +5,15 @@ import { dateFormatter } from '../../utils/dateFormatter';
 import {
   createComment,
   deleteComment,
+  suggestComment,
   updateComment,
+  clearComment,
 } from '../../features/comment/commentSlice';
 import LikeIcon from '../../assets/icons/LikeIcon';
 import EditIcon from '../../assets/icons/EditIcon';
 import DeleteIcon from '../../assets/icons/DeleteIcon';
 import Modal from '../../composition/Modal';
+import RobotIcon from '../../assets/icons/RobotIcon';
 
 function ArticleComment({ articleId, commentRef }) {
   const dispatch = useDispatch();
@@ -64,6 +67,10 @@ function ArticleComment({ articleId, commentRef }) {
 function CommentUser({ articleId, user }) {
   const dispatch = useDispatch();
   const textRef = useRef();
+  const [hasComment, setHasComment] = useState(false);
+  const suggestedComment = useSelector(
+    (state) => state.comments.suggestedComment
+  );
 
   // textarea 사이즈 계산
   function handleInput() {
@@ -71,6 +78,10 @@ function CommentUser({ articleId, user }) {
     if (textarea) {
       textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight + 1}px`;
+      setHasComment(textarea.value !== '');
+
+      // 유저가 코멘트에 아무것도 안적을 때 ai에서 보낸 추천 댓글 비우기
+      if (textarea.value === '') dispatch(clearComment());
     }
   }
 
@@ -88,9 +99,31 @@ function CommentUser({ articleId, user }) {
 
   function handleReset() {
     const textarea = textRef.current;
+
+    //유저가 코멘트 캔슬을 누르면 ai 아이콘도 사라져야함
+    dispatch(clearComment());
+    setHasComment(false);
+
     if (textarea) {
       textarea.style.height = 'auto';
       textarea.value = '';
+    }
+  }
+
+  function handleSuggestComment() {
+    if (suggestedComment !== '') {
+      const textarea = textRef.current;
+
+      // ai 가 "" 안에 추천 댓글을 알려주는 경우에 대비해 그 부분만 코멘트에 복붙
+      const matches = suggestedComment.match(/"(.*?)"/);
+
+      // 유저가 suggestedComment 를 클릭하면 그대로 코멘트에 복붙
+      if (textarea) {
+        textarea.value = matches ? matches[1] : suggestedComment;
+        console.log(matches);
+      }
+    } else {
+      dispatch(suggestComment({ comment: textRef.current.value }));
     }
   }
 
@@ -116,6 +149,14 @@ function CommentUser({ articleId, user }) {
             onInput={handleInput}
             rows={1}
           />
+          {hasComment && (
+            <button type="button" onClick={handleSuggestComment}>
+              <RobotIcon />{' '}
+              {suggestedComment
+                ? `Here is the suggestion: ${suggestedComment}`
+                : 'Do you want to get a suggested comment from me?'}
+            </button>
+          )}
           <div className="comment__user-btns">
             <button type="button" onClick={handleReset}>
               Cancel

@@ -5,6 +5,7 @@ import api from '../../utils/api';
 // 1. getComments - 선택된 article의 댓글 가져오기
 // 2. deleteComment
 // 3. updateComment - like 추가
+// 4. suggestComment - AI
 
 export const getComments = createAsyncThunk(
   'comments/getComments',
@@ -66,6 +67,18 @@ export const updateComment = createAsyncThunk(
   }
 );
 
+export const suggestComment = createAsyncThunk(
+  'ai/suggestComment',
+  async ({ comment }, { rejectWithValue }) => {
+    try {
+      const response = await api.post('/ai', { comment });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.error);
+    }
+  }
+);
+
 const commentSlice = createSlice({
   name: 'comments',
   initialState: {
@@ -74,10 +87,14 @@ const commentSlice = createSlice({
     loading: false,
     error: null,
     success: false,
+    suggestedComment: '',
   },
   reducers: {
     clearErrors: (state) => {
       state.error = null;
+    },
+    clearComment: (state) => {
+      state.suggestedComment = '';
     },
   },
   extraReducers: (builder) => {
@@ -93,8 +110,21 @@ const commentSlice = createSlice({
       .addCase(getComments.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(suggestComment.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(suggestComment.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.suggestedComment = action.payload.suggestedComment.content;
+      })
+      .addCase(suggestComment.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
 export default commentSlice.reducer;
+export const { clearComment } = commentSlice.actions;
