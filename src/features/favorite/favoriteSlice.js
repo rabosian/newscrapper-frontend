@@ -58,6 +58,14 @@ const favoriteSlice = createSlice({
     success: false,
   },
   reducers: {
+    clearFavorite: (state) => {
+      state.articleList = [];
+      state.selectedArticle = null;
+      state.totalArticleCount = 0;
+      state.loading = false;
+      state.error = null;
+      state.success = false;
+    },
     clearErrors: (state) => {
       state.error = null;
     },
@@ -117,4 +125,4 @@ const favoriteSlice = createSlice({
 });
 
 export default favoriteSlice.reducer;
-export const { setSelectedArticle } = favoriteSlice.actions;
+export const { clearFavorite, setSelectedArticle } = favoriteSlice.actions;

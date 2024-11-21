@@ -2,6 +2,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import { getFavoriteArticles } from '../favorite/favoriteSlice';
 
+const initialState = {
+  articleList: [],
+  selectedArticle: null,
+  selectedCategory: 'business',
+  totalArticleCount: 0,
+  totalPageNum: 1,
+  loading: false,
+  error: null,
+  success: false,
+};
+
 // 필요한 API들
 // 1. getArticles - 처음 랜딩 시 보여줄 뉴스들
 // 2. getArticlesByCategory - 카테고리 선택 시 보여줄 뉴스들
@@ -49,17 +60,18 @@ export const updateArticleViews = createAsyncThunk(
 
 const articleSlice = createSlice({
   name: 'articles',
-  initialState: {
-    articleList: [],
-    selectedArticle: null,
-    selectedCategory: 'business',
-    totalArticleCount: 0,
-    totalPageNum: 1,
-    loading: false,
-    error: null,
-    success: false,
-  },
+  initialState,
   reducers: {
+    clearArticle: (state) => {
+      state.articleList = [];
+      state.selectedArticle = null;
+      state.selectedCategory = 'business';
+      state.totalArticleCount = 0;
+      state.totalPageNum = 1;
+      state.loading = false;
+      state.error = null;
+      state.success = false;
+    },
     clearErrors: (state) => {
       state.error = null;
     },
@@ -137,6 +149,7 @@ const articleSlice = createSlice({
 
 export default articleSlice.reducer;
 export const {
+  clearArticle,
   setSelectedArticle,
   setClearSelectedArticle,
   setUpdatedCommentTotal,

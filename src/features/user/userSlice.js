@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
+import { clearArticle } from '../article/articleSlice';
+import { clearFavorite } from '../favorite/favoriteSlice';
 
 // 필요한 API들
 // 1. signup      done
@@ -70,9 +72,11 @@ export const loginWithGoogle = createAsyncThunk(
 
 export const logout = createAsyncThunk(
   'user/logout',
-  async ({ navigate }, { rejectWithValue }) => {
+  async ({ navigate }, { dispatch, rejectWithValue }) => {
     try {
       sessionStorage.removeItem('token');
+      dispatch(clearArticle());
+      dispatch(clearFavorite());
       navigate('/login');
     } catch (error) {
       return rejectWithValue(
