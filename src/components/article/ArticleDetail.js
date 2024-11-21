@@ -10,12 +10,10 @@ import ExitIcon from '../../assets/icons/ExitIcon';
 import ViewIcon from '../../assets/icons/ViewIcon';
 import CommentIcon from '../../assets/icons/CommentIcon';
 import ShareIcon from '../../assets/icons/ShareIcon';
-import LikeIcon from '../../assets/icons/LikeIcon';
 import {
   addFavoriteArticle,
   deleteFavoriteArticle,
 } from '../../features/favorite/favoriteSlice';
-import StarIcon from '../../assets/icons/StarIcon';
 import HeartIcon from '../../assets/icons/HeartIcon';
 
 const body = document.getElementsByTagName('body')[0];
@@ -24,7 +22,6 @@ function ArticleDetail({ article, isFavorite }) {
   const dispatch = useDispatch();
   const commentRef = useRef();
   const [commentOn, setCommentOn] = useState(false);
-  const [favOn, setFavOn] = useState(false);
 
   useEffect(() => {
     dispatch(getComments(article._id));
@@ -108,7 +105,7 @@ function ArticleStats({
   urlToImage,
   publishedAt,
   views,
-  comments,
+  totalCommentCount,
   shares,
   isFavorite,
   handleFavorite,
@@ -128,7 +125,7 @@ function ArticleStats({
       </div>
       <ModalStats
         views={views}
-        comments={comments}
+        totalCommentCount={totalCommentCount}
         shares={shares}
         published={published}
       />
@@ -158,7 +155,7 @@ function ArticleStats({
   );
 }
 
-function ModalStats({ views, comments, shares, published }) {
+function ModalStats({ views, totalCommentCount, shares, published }) {
   return (
     <div className="article__detail-details">
       <div className="article__detail-date">Posted {published}</div>
@@ -169,7 +166,7 @@ function ModalStats({ views, comments, shares, published }) {
         </button>
         <button>
           <CommentIcon />
-          {comments?.length || 0}
+          {totalCommentCount || 0}
         </button>
         <button>
           <ShareIcon />

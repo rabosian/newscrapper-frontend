@@ -3,6 +3,7 @@ import {
   Link,
   useLocation,
   useNavigate,
+  useParams,
   useSearchParams,
 } from 'react-router-dom';
 import './navbar.style.css';
@@ -62,7 +63,7 @@ const Navbar = () => {
   }
 
   function handleLogin() {
-    navigate('/login', { state: { from: location } });
+    navigate('/login');
   }
 
   return (
@@ -83,9 +84,15 @@ const Navbar = () => {
               <button className="navbar__btn" onClick={handleLogout}>
                 Log Out
               </button>
-              <Link className="navbar__favorite" to="/myfavorite">
-                My Page
-              </Link>
+              {location.pathname !== '/myfavorite' ? (
+                <Link className="navbar__favorite" to="/myfavorite">
+                  My Page
+                </Link>
+              ) : (
+                <Link className="navbar__favorite" to="/">
+                  Home
+                </Link>
+              )}
             </>
           ) : (
             <>

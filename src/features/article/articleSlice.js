@@ -25,7 +25,7 @@ export const getArticlesByCategory = createAsyncThunk(
   async ({ category }, { rejectWithValue }) => {
     try {
       const response = await api.get('/articles', { params: { category } });
-      console.log('getArticlesByCategory:', response.data);
+
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -69,9 +69,20 @@ const articleSlice = createSlice({
     setClearSelectedArticle: (state) => {
       state.selectedArticle = null;
     },
-    // setSelectedCategory: (state, action) => {
-    //   state.selectedCategory = action.payload;
-    // },
+    setUpdatedCommentTotal: (state, action) => {
+      const idx = state.articleList.findIndex(
+        ({ _id }) => _id === action.payload.articleId
+      );
+      state.articleList[idx] = {
+        ...state.articleList[idx],
+        totalCommentCount:
+          state.articleList[idx].totalCommentCount + action.payload.increase,
+      };
+      state.selectedArticle = state.articleList[idx];
+    },
+    setSelectedCategory: (state, action) => {
+      state.selectedCategory = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -94,7 +105,10 @@ const articleSlice = createSlice({
       .addCase(getArticlesByCategory.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.articleList = action.payload.articles;
+        state.articleList = action.payload.articles.map((item) => {
+          item.totalCommentCount = item.comments.length;
+          return item;
+        });
         state.totalPageNum = action.payload.totalPageNum;
       })
       .addCase(getArticlesByCategory.rejected, (state, action) => {
@@ -125,5 +139,6 @@ export default articleSlice.reducer;
 export const {
   setSelectedArticle,
   setClearSelectedArticle,
-  // setSelectedCategory,
+  setUpdatedCommentTotal,
+  setSelectedCategory,
 } = articleSlice.actions;

@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
+import { setUpdatedCommentTotal } from '../article/articleSlice';
+import { getFavoriteArticles } from '../favorite/favoriteSlice';
 
 // 필요한 API들
 // 1. getComments - 선택된 article의 댓글 가져오기
@@ -13,7 +15,6 @@ export const getComments = createAsyncThunk(
     try {
       // GET에서 body를 지원하지 않기 때문에 query로 보냄.
       const response = await api.get('/comments', { params: { articleId } });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);
@@ -27,6 +28,8 @@ export const createComment = createAsyncThunk(
     try {
       const response = await api.post('/comments', { articleId, contents });
       dispatch(getComments(articleId));
+      dispatch(setUpdatedCommentTotal({ articleId, increase: 1 }));
+      dispatch(getFavoriteArticles());
       return response.data;
     } catch (error) {
       return rejectWithValue(error.error);
@@ -37,11 +40,12 @@ export const createComment = createAsyncThunk(
 export const deleteComment = createAsyncThunk(
   'comments/deleteComment',
   async ({ articleId, commentId }, { dispatch, rejectWithValue }) => {
-    console.log(articleId, commentId);
     try {
-      const response = await api.delete(`/comments/${commentId}`);
+      await api.delete(`/comments/${commentId}`);
       dispatch(getComments(articleId));
-      return response.data;
+      dispatch(setUpdatedCommentTotal({ articleId, increase: -1 }));
+      dispatch(getFavoriteArticles());
+      return commentId;
     } catch (error) {
       return rejectWithValue(error.error);
     }
