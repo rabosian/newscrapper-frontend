@@ -6,11 +6,34 @@ function RobotIcon() {
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      viewBox="0 0 24 24"
+      viewBox="0 0 64 64"
+      fill="none"
       stroke="currentColor"
     >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 4c-2.21 0 -4 1.79 -4 4v2h-2v7h2v4h8v-4h2v-7h-2v-2c0 -2.21 -1.79 -4 -4 -4zm0 2a2 2 0 0 1 2 2v2h-4v-2a2 2 0 0 1 2 -2zm-3 4h6v3h-6v-3zm-1 5h8v2h-8v-2z" />
+      {/* Head */}
+      <rect x="8" y="10" width="48" height="44" rx="8" fill="#6EC1E4" />
+      {/* Eyes */}
+      <circle cx="20" cy="28" r="6" fill="#FFF" />
+      <circle cx="44" cy="28" r="6" fill="#FFF" />
+      <circle cx="20" cy="28" r="3" fill="#333" />
+      <circle cx="44" cy="28" r="3" fill="#333" />
+      {/* Mouth */}
+      <path
+        d="M16 42c4 3 16 3 16 0s8 3 16 0"
+        stroke="#333"
+        strokeWidth="2"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Antenna */}
+      <line x1="32" y1="6" x2="32" y2="2" stroke="#333" strokeWidth="2" />
+      <circle cx="32" cy="2" r="2" fill="#333" />
+      {/* Gears (for a robotic feel) */}
+      <circle cx="12" cy="18" r="4" fill="#FFF" stroke="#333" strokeWidth="2" />
+      <circle cx="52" cy="18" r="4" fill="#FFF" stroke="#333" strokeWidth="2" />
+      <circle cx="12" cy="18" r="2" fill="#333" />
+      <circle cx="52" cy="18" r="2" fill="#333" />
     </svg>
   );
 }
