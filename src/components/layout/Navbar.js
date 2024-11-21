@@ -12,6 +12,7 @@ import { loginWithToken, logout } from '../../features/user/userSlice';
 import HamburgerIcon from '../../assets/icons/HamburgerIcon';
 import ExitIcon from '../../assets/icons/ExitIcon';
 import { categoryList } from '../../utils/categoryList';
+import Modal from '../../composition/Modal';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Navbar = () => {
   if (!categoryList.includes(category)) category = 'business';
 
   const [isMenuOn, setIsMenuOn] = useState(false);
+  const [isLogoutModalOn, setIsLogoutModalOn] = useState(false);
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -60,6 +62,11 @@ const Navbar = () => {
 
   function handleLogout() {
     dispatch(logout({ navigate }));
+    handleLogoutConfirm();
+  }
+
+  function handleLogoutConfirm() {
+    setIsLogoutModalOn((prev) => !prev);
   }
 
   function handleLogin() {
@@ -81,7 +88,7 @@ const Navbar = () => {
         <div className="navbar__content">
           {user ? (
             <>
-              <button className="navbar__btn" onClick={handleLogout}>
+              <button className="navbar__btn" onClick={handleLogoutConfirm}>
                 Log Out
               </button>
               {location.pathname !== '/myfavorite' ? (
@@ -135,6 +142,24 @@ const Navbar = () => {
         </section>
         {isMenuOn && (
           <div className="navbar__aside-bg" onClick={getMenuTrigger}></div>
+        )}
+        {isLogoutModalOn && (
+          <Modal setModalOn={setIsLogoutModalOn}>
+            <div className="modal__title">
+              Are you sure you want to <span>log out</span>?
+            </div>
+            <div className="modal__btn-box">
+              <button
+                className="modal__btn modal__btn--warn"
+                onClick={handleLogout}
+              >
+                Log out
+              </button>
+              <button className="modal__btn" onClick={handleLogoutConfirm}>
+                Cancel
+              </button>
+            </div>
+          </Modal>
         )}
       </>
     </header>
