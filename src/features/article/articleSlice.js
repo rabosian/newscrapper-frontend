@@ -8,6 +8,7 @@ const initialState = {
   selectedCategory: 'business',
   totalArticleCount: 0,
   totalPageNum: 1,
+  page: 0,
   loading: false,
   error: null,
   success: false,
@@ -33,10 +34,11 @@ export const getArticles = createAsyncThunk(
 
 export const getArticlesByCategory = createAsyncThunk(
   'articles/getArticlesByCategory',
-  async ({ category }, { rejectWithValue }) => {
+  async ({ page, category }, { rejectWithValue }) => {
     try {
-      const response = await api.get('/articles', { params: { category } });
-
+      const response = await api.get('/articles', {
+        params: { page: page || 1, category },
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -68,6 +70,7 @@ const articleSlice = createSlice({
       state.selectedCategory = 'business';
       state.totalArticleCount = 0;
       state.totalPageNum = 1;
+      state.page = 0;
       state.loading = false;
       state.error = null;
       state.success = false;
@@ -85,6 +88,7 @@ const articleSlice = createSlice({
       const idx = state.articleList.findIndex(
         ({ _id }) => _id === action.payload.articleId
       );
+
       state.articleList[idx] = {
         ...state.articleList[idx],
         totalCommentCount:
@@ -117,11 +121,14 @@ const articleSlice = createSlice({
       .addCase(getArticlesByCategory.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        state.articleList = action.payload.articles.map((item) => {
+        const newArticles = action.payload.articles.map((item) => {
           item.totalCommentCount = item.comments.length;
           return item;
         });
+
+        state.articleList = [...state.articleList, ...newArticles];
         state.totalPageNum = action.payload.totalPageNum;
+        state.page = state.page + 1;
       })
       .addCase(getArticlesByCategory.rejected, (state, action) => {
         state.loading = false;

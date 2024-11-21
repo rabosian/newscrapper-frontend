@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import './styles/articleDetail.style.css';
 import { dateFormatter } from '../../utils/dateFormatter';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setClearSelectedArticle } from '../../features/article/articleSlice';
 import ArticleComment from './ArticleComment';
 import { getComments } from '../../features/comment/commentSlice';
 import ExitIcon from '../../assets/icons/ExitIcon';
 import ViewIcon from '../../assets/icons/ViewIcon';
 import CommentIcon from '../../assets/icons/CommentIcon';
-import ShareIcon from '../../assets/icons/ShareIcon';
 import {
   addFavoriteArticle,
   deleteFavoriteArticle,
@@ -38,6 +37,7 @@ function ArticleDetail({ article, isFavorite }) {
   }, []);
 
   useEffect(() => {
+    // when comment box is opened automactically scroll to comment scrolled position
     if (commentOn) {
       commentRef.current.scrollIntoView({
         behavior: 'smooth',
@@ -46,11 +46,11 @@ function ArticleDetail({ article, isFavorite }) {
     }
   }, [commentOn]);
 
-  function handleClose() {
+  function handleModalClose() {
     dispatch(setClearSelectedArticle());
   }
 
-  function handleClickComment() {
+  function handleCommentClick() {
     setCommentOn((prev) => !prev);
   }
 
@@ -71,7 +71,7 @@ function ArticleDetail({ article, isFavorite }) {
           }`}
         >
           <div className="article__detail-group">
-            <div className="article__detail-close" onClick={handleClose}>
+            <div className="article__detail-close" onClick={handleModalClose}>
               <ExitIcon />
             </div>
             <ArticleStats
@@ -84,14 +84,14 @@ function ArticleDetail({ article, isFavorite }) {
                 commentOn && 'article__detail-comment--active'
               }`}
             >
-              <button onClick={handleClickComment}>Comment</button>
+              <button onClick={handleCommentClick}>Comment</button>
             </div>
           </div>
           {commentOn && (
             <ArticleComment articleId={article._id} commentRef={commentRef} />
           )}
         </div>
-        <div className="back-cover" onClick={handleClose}></div>
+        <div className="back-cover" onClick={handleModalClose}></div>
       </section>
     </>
   );
@@ -106,11 +106,11 @@ function ArticleStats({
   publishedAt,
   views,
   totalCommentCount,
-  shares,
   isFavorite,
   handleFavorite,
 }) {
   const published = dateFormatter(publishedAt);
+
   return (
     <div className="article__detail-desc">
       {/* Image */}
@@ -126,7 +126,6 @@ function ArticleStats({
       <ModalStats
         views={views}
         totalCommentCount={totalCommentCount}
-        shares={shares}
         published={published}
       />
       {/* Information */}
@@ -155,7 +154,7 @@ function ArticleStats({
   );
 }
 
-function ModalStats({ views, totalCommentCount, shares, published }) {
+function ModalStats({ views, totalCommentCount, published }) {
   return (
     <div className="article__detail-details">
       <div className="article__detail-date">Posted {published}</div>
@@ -167,10 +166,6 @@ function ModalStats({ views, totalCommentCount, shares, published }) {
         <button>
           <CommentIcon />
           {totalCommentCount || 0}
-        </button>
-        <button>
-          <ShareIcon />
-          {shares?.length || 0}
         </button>
       </div>
     </div>

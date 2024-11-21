@@ -14,9 +14,14 @@ import EditIcon from '../../assets/icons/EditIcon';
 import DeleteIcon from '../../assets/icons/DeleteIcon';
 import Modal from '../../composition/Modal';
 import RobotIcon from '../../assets/icons/RobotIcon';
+import { useLocation } from 'react-router-dom';
+import { setSelectedArticle } from '../../features/article/articleSlice';
 
 function ArticleComment({ articleId, commentRef }) {
   const dispatch = useDispatch();
+  const { selectedArticle } = useSelector((store) => store.article);
+  const location = useLocation();
+  const isFromFavorite = location.pathname === '/myfavorite';
   const user = useSelector((store) => store.user.user);
   const [loginError, setLoginError] = useState(
     user ? null : '* You need to log in to comment'
@@ -33,12 +38,27 @@ function ArticleComment({ articleId, commentRef }) {
       const payload = { articleId, commentId, likeRequest: true };
       dispatch(updateComment(payload));
     },
+    handleAdd: async ({ payload }) => {
+      await dispatch(createComment(payload));
+      dispatch(
+        setSelectedArticle({
+          ...selectedArticle,
+          totalCommentCount: selectedArticle.totalCommentCount + 1,
+        })
+      );
+    },
     handleEdit: ({ commentId, contents }) => {
       const payload = { articleId, commentId, contents };
       dispatch(updateComment(payload));
     },
-    handleDelete: (commentId) => {
-      dispatch(deleteComment({ commentId, articleId }));
+    handleDelete: async (commentId) => {
+      await dispatch(deleteComment({ commentId, articleId, isFromFavorite }));
+      dispatch(
+        setSelectedArticle({
+          ...selectedArticle,
+          totalCommentCount: selectedArticle.totalCommentCount - 1,
+        })
+      );
     },
   };
 
@@ -46,7 +66,14 @@ function ArticleComment({ articleId, commentRef }) {
     <div className="comment" ref={commentRef}>
       <span style={{ color: 'red' }}>{loginError}</span>
       {/* user write comment */}
-      {user && <CommentUser articleId={articleId} user={user} />}
+      {user && (
+        <CommentUser
+          articleId={articleId}
+          user={user}
+          isFromFavorite={isFromFavorite}
+          eventObj={eventObj}
+        />
+      )}
       {/* comment lists */}
       <div className="comment__list">
         {!error &&
@@ -64,8 +91,9 @@ function ArticleComment({ articleId, commentRef }) {
   );
 }
 
-function CommentUser({ articleId, user }) {
+function CommentUser({ articleId, user, isFromFavorite, eventObj }) {
   const dispatch = useDispatch();
+
   const textRef = useRef();
   const [hasComment, setHasComment] = useState(false);
   const suggestedComment = useSelector(
@@ -92,8 +120,8 @@ function CommentUser({ articleId, user }) {
     if (!user) return;
 
     if (value.trim() === '') return;
-    const payload = { articleId, contents: value };
-    dispatch(createComment(payload));
+    const payload = { articleId, contents: value, isFromFavorite };
+    eventObj.handleAdd({ payload });
     handleReset();
   }
 

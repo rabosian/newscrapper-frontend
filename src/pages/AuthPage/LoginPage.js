@@ -31,13 +31,6 @@ const LoginPage = () => {
   }
 
   const handleGoogleLogin = async (googleData) => {
-    //login with Google
-    // console.log('googleData', googleData);
-
-    // 구글 로그인 문제시 이걸 실행
-    // dispatch(loginWithGoogle(googleData.credential));
-
-    // 새로운 추가
     dispatch(loginWithGoogle(googleData.access_token));
   };
 

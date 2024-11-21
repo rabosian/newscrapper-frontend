@@ -1,16 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './styles/articleCard.style.css';
 import { dateFormatter } from '../../utils/dateFormatter';
 import ViewIcon from '../../assets/icons/ViewIcon';
 import CommentIcon from '../../assets/icons/CommentIcon';
-import ShareIcon from '../../assets/icons/ShareIcon';
-import LikeIcon from '../../assets/icons/LikeIcon';
-import { useSelector } from 'react-redux';
-import StarIcon from '../../assets/icons/StarIcon';
+import { useDispatch, useSelector } from 'react-redux';
 import HeartIcon from '../../assets/icons/HeartIcon';
+import { getArticlesByCategory } from '../../features/article/articleSlice';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 
-function ArticleCard({ item, handleOpen, handleFavorite }) {
+function ArticleCard({
+  item,
+  handleOpen,
+  handleFavorite,
+  isLast,
+  totalPageNum,
+  page,
+  category,
+}) {
+  const dispatch = useDispatch();
+  const lastIdxRef = useRef(null);
   const [published, setPublished] = useState(null);
+  const isVisible = useInfiniteScroll(lastIdxRef, { threshold: 1.0 });
+
+  useEffect(() => {
+    if (isLast && isVisible && totalPageNum >= page) {
+      dispatch(getArticlesByCategory({ page: page + 1, category }));
+    }
+  }, [isVisible]);
 
   const favoriteList = useSelector((state) => state.favorite.articleList);
   const isFavorite = favoriteList.find((favorite) => favorite._id === item._id);
@@ -22,7 +38,7 @@ function ArticleCard({ item, handleOpen, handleFavorite }) {
     }
   }, [item]);
 
-  function handleStar(e) {
+  function handleFavoriteClick(e) {
     // to prevent bubbling
     e.stopPropagation();
 
@@ -30,14 +46,15 @@ function ArticleCard({ item, handleOpen, handleFavorite }) {
   }
 
   return (
-    <section className="article__card">
+    <section className="article__card" ref={lastIdxRef}>
       <div className="image-container" onClick={() => handleOpen(item)}>
+        {/* check if current article doesnt carry a front image */}
         {item.urlToImage ? (
           <img src={item.urlToImage} alt={item.title} />
         ) : (
           <div className="no-image"></div>
         )}
-        <button onClick={handleStar} className="article__detail-fav">
+        <button onClick={handleFavoriteClick} className="article__detail-fav">
           <HeartIcon isActive={isFavorite} />
         </button>
       </div>
@@ -48,19 +65,14 @@ function ArticleCard({ item, handleOpen, handleFavorite }) {
         </div>
         <div className="article__card-details">
           <div className="article__card-date">{published}</div>
-          <CardStats
-            item={item}
-            handleOpen={handleOpen}
-            handleFavorite={handleFavorite}
-            isFavorite={isFavorite}
-          />
+          <CardStats item={item} handleOpen={handleOpen} />
         </div>
       </div>
     </section>
   );
 }
 
-function CardStats({ item, handleOpen, handleFavorite, isFavorite }) {
+function CardStats({ item, handleOpen }) {
   return (
     <div className="article__card-stats">
       <button onClick={() => handleOpen(item)}>
@@ -71,10 +83,6 @@ function CardStats({ item, handleOpen, handleFavorite, isFavorite }) {
         <CommentIcon />
         {item.totalCommentCount || 0}
       </button>
-      {/* <button onClick={() => handleOpen(item)}>
-        <ShareIcon />
-        {item.shares?.length || 0}
-      </button> */}
     </div>
   );
 }
