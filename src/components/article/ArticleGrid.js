@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getArticlesByCategory,
   setSelectedArticle,
-  // setSelectedCategory,
   updateArticleViews,
 } from '../../features/article/articleSlice';
 import {
@@ -19,9 +18,7 @@ import { categoryList } from '../../utils/categoryList';
 
 function ArticleGrid() {
   const dispatch = useDispatch();
-  const { articleList, selectedCategory } = useSelector(
-    (state) => state.article
-  );
+  const { articleList } = useSelector((state) => state.article);
 
   const [query] = useSearchParams();
   let category = query.get('category') || 'business';
@@ -29,7 +26,6 @@ function ArticleGrid() {
 
   useEffect(() => {
     dispatch(getArticlesByCategory({ category }));
-    // dispatch(setSelectedCategory(category));
   }, [query]);
 
   useEffect(() => {

@@ -10,6 +10,7 @@ import ArticleCard from '../../components/article/ArticleCard.js';
 import EmptyItem from '../../components/common/EmptyItem.js';
 import '../../components/article/styles/articleGrid.style.css';
 import '../HomePage/home.style.css';
+import { updateArticleViews } from '../../features/article/articleSlice.js';
 
 function FavoritePage() {
   const dispatch = useDispatch();
@@ -20,12 +21,13 @@ function FavoritePage() {
 
   const favoriteList = useSelector((state) => state.favorite.articleList);
 
-  function handleOpen(item) {
-    dispatch(setSelectedArticle(item));
+  async function handleOpen(item) {
+    dispatch(updateArticleViews(item._id));
+    dispatch(setSelectedArticle({ ...item, views: item.views + 1 }));
   }
 
-  function handleClick(item) {
-    dispatch(deleteFavoriteArticle({ articleId: item._id }));
+  function getNext() {
+    dispatch(getFavoriteArticles());
   }
 
   function handleFavorite({ isFavorite, articleId }) {
@@ -57,7 +59,6 @@ function FavoritePage() {
                   key={item.url}
                   handleOpen={handleOpen}
                   handleFavorite={handleFavorite}
-                  isFavorite={true}
                 />
               );
             })}
