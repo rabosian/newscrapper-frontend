@@ -6,6 +6,7 @@ import '../../components/article/styles/articleGrid.style.css';
 import '../HomePage/home.style.css';
 import ArticleGrid from '../../components/article/ArticleGrid.js';
 import { clearArticle } from '../../features/article/articleSlice.js';
+import LoadingSpinner from '../../components/common/LoadingSpinner.js';
 
 function FavoritePage() {
   const dispatch = useDispatch();
@@ -19,7 +20,11 @@ function FavoritePage() {
     };
   }, []);
 
-  const favoriteList = useSelector((state) => state.favorite.articleList);
+  const { articleList: favoriteList, loading } = useSelector(
+    (state) => state.favorite
+  );
+
+  if (loading) return <LoadingSpinner />;
 
   if (favoriteList.length === 0)
     return (

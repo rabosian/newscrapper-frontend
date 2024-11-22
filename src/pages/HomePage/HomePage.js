@@ -9,6 +9,7 @@ import {
   getArticlesByCategory,
 } from '../../features/article/articleSlice';
 import { getFavoriteArticles } from '../../features/favorite/favoriteSlice';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -30,10 +31,10 @@ function HomePage() {
     };
   }, [query]);
 
-  const { articleList, totalPageNum, page } = useSelector(
+  const { articleList, totalPageNum, page, loading } = useSelector(
     (state) => state.article
   );
-
+  if (loading) return <LoadingSpinner />;
   return (
     <main className="home">
       <HomeAside categoryList={categoryList} />
