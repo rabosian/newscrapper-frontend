@@ -91,6 +91,30 @@
   }
 }
 
+.comment__ai {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  background-color: #dddddd;
+  margin-right: auto;
+  padding: 0.5em;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+
+  &-text {
+    white-space: pre-wrap;
+    background-color: #282828;
+    padding: 0.5em;
+    color: #fff;
+  }
+
+  &--active {
+    // background-color: transparent;
+    border: 1px solid var(--clr-highlight);
+  }
+}
+
 .comment__list {
   display: flex;
   flex-direction: column;
@@ -118,8 +142,10 @@
     }
 
     p {
+      width: 100%;
       white-space: pre-wrap;
       color: var(--clr-font-drk);
+      line-height: 1.5rem;
     }
 
     p.hide {
@@ -138,6 +164,10 @@
       margin-left: auto;
       margin-bottom: auto;
     }
+  }
+
+  form {
+    width: 100%;
   }
 
   &-edit {
