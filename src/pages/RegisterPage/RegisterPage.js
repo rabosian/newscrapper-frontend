@@ -3,6 +3,7 @@ import './register.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../features/user/userSlice';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
