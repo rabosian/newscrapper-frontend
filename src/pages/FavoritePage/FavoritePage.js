@@ -24,15 +24,16 @@ function FavoritePage() {
     (state) => state.favorite
   );
 
-  if (loading) return <LoadingSpinner />;
+  // if (loading) return <LoadingSpinner />;
 
-  if (favoriteList.length === 0)
+  if (!loading && favoriteList.length === 0)
     return (
       <EmptyItem title={'No Favorites Yet'} content={'Add your favorites!'} />
     );
 
   return (
     <main className="home">
+      {loading && <LoadingSpinner />}
       <div className="wrapper">
         <ArticleGrid category={'My Favorites'} articleList={favoriteList} />
       </div>

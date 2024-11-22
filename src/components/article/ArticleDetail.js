@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './styles/articleDetail.style.css';
 import { dateFormatter } from '../../utils/dateFormatter';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { setClearSelectedArticle } from '../../features/article/articleSlice';
 import ArticleComment from './ArticleComment';
 import { getComments } from '../../features/comment/commentSlice';
@@ -19,8 +19,10 @@ const body = document.getElementsByTagName('body')[0];
 
 function ArticleDetail({ article, isFavorite }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const commentRef = useRef();
   const [commentOn, setCommentOn] = useState(false);
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     dispatch(getComments(article._id));
@@ -55,6 +57,10 @@ function ArticleDetail({ article, isFavorite }) {
   }
 
   function handleFavorite({ isFavorite }) {
+    if (!user) {
+      navigate('/login');
+    }
+
     if (isFavorite) {
       dispatch(deleteFavoriteArticle({ articleId: article._id }));
     } else {

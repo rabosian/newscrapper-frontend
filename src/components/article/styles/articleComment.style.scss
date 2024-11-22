@@ -7,7 +7,8 @@
   flex: 1 0 50%;
   gap: 1em;
   overflow-y: auto;
-  max-height: fit-content;
+  // max-height: fit-content;
+  position: relative;
 
   //---------- scroll styling ---------//
   &::-webkit-scrollbar {

@@ -55,7 +55,6 @@
   aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
-  cursor: pointer;
 }
 .home__aside .line {
   width: 100%;

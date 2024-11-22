@@ -1,0 +1,49 @@
+.loading__comment {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loading__comment-box {
+  width: 3rem;
+  height: 3rem;
+  position: relative;
+}
+.loading__comment-box div {
+  border-radius: 50%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 6px solid transparent;
+  animation: spinner 2s linear infinite;
+}
+.loading__comment-box div:nth-of-type(1) {
+  border-color: transparent transparent transparent rgba(68, 137, 210, 0.501);
+  animation-delay: -0.65s;
+}
+.loading__comment-box div:nth-of-type(2) {
+  border-color: transparent transparent transparent rgba(210, 68, 68, 0.472);
+  animation-delay: 0s;
+}
+.loading__comment-box div:nth-of-type(3) {
+  border-color: transparent transparent transparent rgba(68, 210, 78, 0.483);
+  animation-delay: 0.65s;
+}
+
+@keyframes spinner {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.loading__bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.099);
+}/*# sourceMappingURL=loadingComment.style.css.map */

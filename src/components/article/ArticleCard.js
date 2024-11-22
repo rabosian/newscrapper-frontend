@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import HeartIcon from '../../assets/icons/HeartIcon';
 import { getArticlesByCategory } from '../../features/article/articleSlice';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import { useNavigate } from 'react-router-dom';
 
 function ArticleCard({
   item,
@@ -18,9 +19,11 @@ function ArticleCard({
   category,
 }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const lastIdxRef = useRef(null);
   const [published, setPublished] = useState(null);
   const isVisible = useInfiniteScroll(lastIdxRef, { threshold: 1.0 });
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     if (isLast && isVisible && totalPageNum >= page) {
@@ -41,6 +44,10 @@ function ArticleCard({
   function handleFavoriteClick(e) {
     // to prevent bubbling
     e.stopPropagation();
+
+    if (!user) {
+      navigate('/login');
+    }
 
     handleFavorite({ isFavorite, articleId: item });
   }

@@ -5,10 +5,17 @@ function LoadingSpinner() {
   return (
     <div
       style={{
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // height: '100vh',
+
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
+        minHeight: '20rem',
+        height: '50vh',
+        width: '100%',
       }}
     >
       <RotatingTriangles

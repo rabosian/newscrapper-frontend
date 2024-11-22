@@ -16,6 +16,7 @@ import Modal from '../../composition/Modal';
 import RobotIcon from '../../assets/icons/RobotIcon';
 import { useLocation } from 'react-router-dom';
 import { setSelectedArticle } from '../../features/article/articleSlice';
+import LoadingComment from '../common/LoadingComment';
 
 function ArticleComment({ articleId, commentRef }) {
   const dispatch = useDispatch();
@@ -26,7 +27,9 @@ function ArticleComment({ articleId, commentRef }) {
   const [loginError, setLoginError] = useState(
     user ? null : '* You need to log in to comment'
   );
-  const { error, commentList } = useSelector((store) => store.comments);
+  const { error, commentList, loading } = useSelector(
+    (store) => store.comments
+  );
 
   // event handler method
   const eventObj = {
@@ -64,6 +67,8 @@ function ArticleComment({ articleId, commentRef }) {
 
   return (
     <div className="comment" ref={commentRef}>
+      {loading && <LoadingComment />}
+
       <span style={{ color: 'red' }}>{loginError}</span>
       {/* user write comment */}
       {user && (
@@ -284,69 +289,67 @@ function CommentCard({ comment, user, eventObj }) {
   }
 
   return (
-    <>
-      <section className="comment__list-card" key={comment._id}>
-        <div className="image-container">
-          <img src={comment.userId.picture} alt={comment.userId.name} />
-        </div>
-        <div className="comment__list-content">
-          <div className="comment__profile">
-            <h3>{comment.userId.name}</h3>
-            <div className="comment__profile-date">
-              {dateFormatter(comment.createdAt)}
-            </div>
+    <section className="comment__list-card" key={comment._id}>
+      <div className="image-container">
+        <img src={comment.userId.picture} alt={comment.userId.name} />
+      </div>
+      <div className="comment__list-content">
+        <div className="comment__profile">
+          <h3>{comment.userId.name}</h3>
+          <div className="comment__profile-date">
+            {dateFormatter(comment.createdAt)}
           </div>
-          <div className="comment__list-comment">
-            {isEditing ? (
-              <form onSubmit={handleEditSubmit}>
-                <textarea
-                  className="comment__list-edit"
-                  ref={editRef}
-                  onInput={handleInput}
-                  defaultValue={comment.contents}
-                  rows={1}
-                />
-                <div className="comment__list-btn-box">
-                  <button type="submit">Edit</button>
-                  <button type="button" onClick={() => setIsEditing(false)}>
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            ) : (
-              <>
-                <p className={`${large && !readMore && 'hide'}`}>
-                  {comment.contents}
-                </p>
-                <textarea
-                  className="display-none"
-                  ref={textRef}
-                  value={comment.contents}
-                  readOnly
-                />
-              </>
-            )}
-          </div>
-          {comment.isEdited && (
-            <div className="comment__list-edited">(edited)</div>
-          )}
-          {!isEditing && large && (
-            <button
-              className="comment__list-readmore"
-              onClick={() => setReadMore((prev) => !prev)}
-            >
-              {readMore ? 'Show less' : 'Read more'}
-            </button>
-          )}
-          <CommentOption
-            user={user}
-            comment={comment}
-            eventObj={eventObj}
-            setIsEditing={setIsEditing}
-          />
         </div>
-      </section>
-    </>
+        <div className="comment__list-comment">
+          {isEditing ? (
+            <form onSubmit={handleEditSubmit}>
+              <textarea
+                className="comment__list-edit"
+                ref={editRef}
+                onInput={handleInput}
+                defaultValue={comment.contents}
+                rows={1}
+              />
+              <div className="comment__list-btn-box">
+                <button type="submit">Edit</button>
+                <button type="button" onClick={() => setIsEditing(false)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <p className={`${large && !readMore && 'hide'}`}>
+                {comment.contents}
+              </p>
+              <textarea
+                className="display-none"
+                ref={textRef}
+                value={comment.contents}
+                readOnly
+              />
+            </>
+          )}
+        </div>
+        {comment.isEdited && (
+          <div className="comment__list-edited">(edited)</div>
+        )}
+        {!isEditing && large && (
+          <button
+            className="comment__list-readmore"
+            onClick={() => setReadMore((prev) => !prev)}
+          >
+            {readMore ? 'Show less' : 'Read more'}
+          </button>
+        )}
+        <CommentOption
+          user={user}
+          comment={comment}
+          eventObj={eventObj}
+          setIsEditing={setIsEditing}
+        />
+      </div>
+    </section>
   );
 }
 
