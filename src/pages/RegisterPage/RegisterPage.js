@@ -10,7 +10,7 @@ const RegisterPage = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false); // sign-up 버튼 disable
 
-  const { user } = useSelector((store) => store.user);
+  const { user, loading } = useSelector((store) => store.user);
 
   useEffect(() => {
     if (user) {
@@ -67,6 +67,8 @@ const RegisterPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="register">

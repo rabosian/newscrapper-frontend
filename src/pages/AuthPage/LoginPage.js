@@ -6,6 +6,7 @@ import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { loginWithGoogle } from '../../features/user/userSlice';
 import { loginWithEmail } from '../../features/user/userSlice';
 import GoogleButton from 'react-google-button';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,8 @@ const LoginPage = () => {
     onSuccess: handleGoogleLogin,
     onError: () => console.log('Login Failed'),
   });
+
+  if (loading) return <LoadingSpinner />;
 
   return (
     <main className="login">
