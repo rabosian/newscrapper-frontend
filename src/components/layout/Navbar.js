@@ -26,6 +26,7 @@ const Navbar = () => {
   const [isMenuOn, setIsMenuOn] = useState(false);
   const [isLogoutModalOn, setIsLogoutModalOn] = useState(false);
   const { user } = useSelector((state) => state.user);
+  const { selectedArticle } = useSelector((store) => store.article);
 
   useEffect(() => {
     // 세션스토리지에 토큰이 있을 때만 실행
@@ -38,7 +39,7 @@ const Navbar = () => {
   useEffect(() => {
     // 유저가 hamburger 메뉴를 킨 상태에서 윈도우 창을 resize 했을때 발생
     function resizeHandler() {
-      if (isMenuOn && window.innerWidth <= 1125) {
+      if (selectedArticle || (isMenuOn && window.innerWidth <= 1125)) {
         document.body.style.overflow = 'hidden';
       } else {
         document.body.style.overflow = '';
@@ -54,7 +55,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener('resize', resizeHandler);
     };
-  }, [isMenuOn]);
+  }, [isMenuOn, selectedArticle]);
 
   function getMenuTrigger() {
     setIsMenuOn((prev) => !prev);
