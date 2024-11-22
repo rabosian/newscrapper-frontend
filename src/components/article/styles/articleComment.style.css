@@ -7,8 +7,7 @@
   flex: 1 0 50%;
   gap: 1em;
   overflow-y: auto;
-  max-height: -moz-fit-content;
-  max-height: fit-content;
+  position: relative;
   scrollbar-width: thin;
   scrollbar-color: varvar(--clr-bg-lgt) var(--clr-bg-lgt);
 }

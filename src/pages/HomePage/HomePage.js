@@ -34,19 +34,24 @@ function HomePage() {
   const { articleList, totalPageNum, page, loading } = useSelector(
     (state) => state.article
   );
-  if (loading) return <LoadingSpinner />;
+
+  // if (loading) return <LoadingSpinner />;
+
   return (
-    <main className="home">
-      <HomeAside categoryList={categoryList} />
-      <div className="wrapper">
-        <ArticleGrid
-          category={category}
-          articleList={articleList}
-          totalPageNum={totalPageNum}
-          page={page}
-        />
-      </div>
-    </main>
+    <>
+      <main className="home">
+        <HomeAside categoryList={categoryList} />
+        <div className="wrapper">
+          <ArticleGrid
+            category={category}
+            articleList={articleList}
+            totalPageNum={totalPageNum}
+            page={page}
+            loading={loading}
+          />
+        </div>
+      </main>
+    </>
   );
 }
 

@@ -158,14 +158,9 @@
   align-items: center;
   color: var(--clr-font-drk);
   font-weight: bold;
+  cursor: default;
 }
-.article__detail-stats button:nth-child(1) {
-  cursor: auto;
-}
-.article__detail-stats button:nth-child(1) svg {
-  color: var(--clr-font);
-}
-.article__detail-stats button:not(:nth-of-type(1)):hover svg {
+.article__detail-stats button svg {
   color: var(--clr-font);
 }
 .article__detail-date {

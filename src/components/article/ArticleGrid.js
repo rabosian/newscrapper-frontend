@@ -11,8 +11,9 @@ import {
 } from '../../features/favorite/favoriteSlice';
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
+import LoadingSpinner from '../common/LoadingSpinner';
 
-function ArticleGrid({ category, articleList, totalPageNum, page }) {
+function ArticleGrid({ category, articleList, totalPageNum, page, loading }) {
   const dispatch = useDispatch();
 
   // when the user opened the article
@@ -30,7 +31,7 @@ function ArticleGrid({ category, articleList, totalPageNum, page }) {
     }
   }
 
-  if (articleList.length === 0)
+  if (!loading && articleList.length === 0)
     return (
       <EmptyItem
         title={'No News Yet'}
@@ -67,6 +68,7 @@ function ArticleGrid({ category, articleList, totalPageNum, page }) {
             );
           })}
       </div>
+      {loading && totalPageNum >= page && <LoadingSpinner />}
     </article>
   );
 }

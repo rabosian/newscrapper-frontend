@@ -172,15 +172,8 @@
       align-items: center;
       color: var(--clr-font-drk);
       font-weight: bold;
-
-      &:nth-child(1) {
-        cursor: auto;
-        svg {
-          color: var(--clr-font);
-        }
-      }
-
-      &:not(:nth-of-type(1)):hover svg {
+      cursor: default;
+      svg {
         color: var(--clr-font);
       }
     }
