@@ -3,6 +3,7 @@ import './register.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../features/user/userSlice';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -10,7 +11,7 @@ const RegisterPage = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false); // sign-up 버튼 disable
 
-  const { user } = useSelector((store) => store.user);
+  const { user, loading } = useSelector((store) => store.user);
 
   useEffect(() => {
     if (user) {
@@ -67,6 +68,8 @@ const RegisterPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="register">
