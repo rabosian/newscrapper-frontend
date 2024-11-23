@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Link,
+  NavLink,
   useLocation,
   useNavigate,
   useParams,
@@ -79,11 +80,15 @@ const Navbar = () => {
       <div className="navbar__menu" onClick={getMenuTrigger}>
         <HamburgerIcon />
       </div>
-      <Link to="/" className="navbar__logo">
+      <NavLink
+        to="/"
+        className="navbar__logo"
+        onClick={() => window.scrollTo(0, 0)}
+      >
         <div className="image-container">
           <img src="/assets/images/lowdown-logo.png" alt="logo-image" />
         </div>
-      </Link>
+      </NavLink>
 
       <nav>
         <div className="navbar__content">

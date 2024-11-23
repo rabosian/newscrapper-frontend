@@ -34,10 +34,10 @@ const Footer = () => {
     <footer className="footer">
       <div className="wrapper">
         <div className="footer__content">
-          <div className="image-container logo">
+          {/* <div className="image-container logo">
             <img src="/assets/images/lowdown-logo.png" alt="lowdown logo" />
           </div>
-          <div className="line"></div>
+          <div className="line"></div> */}
           <div className="footer__text">
             <div className="footer__link">
               <Link to="/">Contact Us</Link>
