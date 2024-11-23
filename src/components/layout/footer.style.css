@@ -2,19 +2,10 @@
   box-shadow: 0px -4px 8px -4px rgba(0, 0, 0, 0.152);
 }
 .footer__content {
-  padding: 2em 1em;
+  padding: 4em 1em;
   display: flex;
   flex-direction: column;
   gap: 1em;
-}
-.footer__content .image-container.logo {
-  margin: 2rem 0;
-  width: 16em;
-  aspect-ratio: 8/2;
-}
-.footer__content .image-container.logo img {
-  -o-object-fit: contain;
-     object-fit: contain;
 }
 .footer__text {
   display: flex;
@@ -39,9 +30,4 @@
   width: 1.6em;
   height: 1.6em;
   fill: var(--clr-font);
-}
-.footer .line {
-  width: 100%;
-  height: 2px;
-  background-color: #dedede;
 }/*# sourceMappingURL=footer.style.css.map */
