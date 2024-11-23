@@ -1,12 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 
-// 필요한 API들
-// 1. getFavoriteArticles - 유저가 즐겨찾기 한 기사들 (타이틀만 가져올거면 2번도 필요함)
-// 2. getFavoriteArticlesDetails - TO BE DETERMINED (TBD)
-// 3. deleteFavoriteArticle - 유저가 즐겨찾기 취소할 경우 테이블에서 지움
-// 4. addFavoriteArticle
-
 export const getFavoriteArticles = createAsyncThunk(
   'myfavorite/getFavoriteArticles',
   async (_, { rejectWithValue }) => {
@@ -45,8 +39,6 @@ export const deleteFavoriteArticle = createAsyncThunk(
   }
 );
 
-export const getFavoriteArticlesDetails = createAsyncThunk();
-
 const favoriteSlice = createSlice({
   name: 'articles',
   initialState: {
@@ -69,20 +61,6 @@ const favoriteSlice = createSlice({
     clearErrors: (state) => {
       state.error = null;
     },
-    setSelectedArticleFavorite: (state, action) => {
-      state.selectedArticle = action.payload;
-    },
-    setUpdatedCommentTotalFavorite: (state, action) => {
-      const idx = state.articleList.findIndex(
-        ({ _id }) => _id === action.payload.articleId
-      );
-      state.articleList[idx] = {
-        ...state.articleList[idx],
-        totalCommentCount:
-          state.articleList[idx].totalCommentCount + action.payload.increase,
-      };
-      state.selectedArticle = state.articleList[idx];
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -95,7 +73,7 @@ const favoriteSlice = createSlice({
         state.success = true;
 
         state.articleList = action.payload.articleList
-          .map((item, idx) => {
+          .map((item) => {
             item.totalCommentCount = item.comments.length;
             return item;
           })
@@ -137,8 +115,4 @@ const favoriteSlice = createSlice({
 });
 
 export default favoriteSlice.reducer;
-export const {
-  clearFavorite,
-  setSelectedArticleFavorite,
-  setUpdatedCommentTotalFavorite,
-} = favoriteSlice.actions;
+export const { clearFavorite } = favoriteSlice.actions;

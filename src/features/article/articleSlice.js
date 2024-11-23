@@ -14,24 +14,6 @@ const initialState = {
   success: false,
 };
 
-// 필요한 API들
-// 1. getArticles - 처음 랜딩 시 보여줄 뉴스들
-// 2. getArticlesByCategory - 카테고리 선택 시 보여줄 뉴스들
-// 3. saveAndUpdateArticles - 유저의 인터랙션이 있을 시 (댓글/라이크) DB에 저장하고 댓글, 라이크 저장/업데이트
-
-// 더이상 사용하지 않는 함수??? -> 제거
-export const getArticles = createAsyncThunk(
-  'articles/getArticles',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await api.get('/articles');
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
-
 export const getArticlesByCategory = createAsyncThunk(
   'articles/getArticlesByCategory',
   async ({ page, category }, { rejectWithValue }) => {
@@ -96,25 +78,9 @@ const articleSlice = createSlice({
       };
       state.selectedArticle = state.articleList[idx];
     },
-    setSelectedCategory: (state, action) => {
-      state.selectedCategory = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getArticles.pending, (state, action) => {
-        state.loading = true;
-      })
-      .addCase(getArticles.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-        state.articleList = action.payload.articles;
-        state.totalPageNum = action.payload.totalPageNum;
-      })
-      .addCase(getArticles.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
       .addCase(getArticlesByCategory.pending, (state, action) => {
         state.loading = true;
       })
@@ -160,5 +126,4 @@ export const {
   setSelectedArticle,
   setClearSelectedArticle,
   setUpdatedCommentTotal,
-  setSelectedCategory,
 } = articleSlice.actions;

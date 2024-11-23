@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './login.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import { loginWithGoogle } from '../../features/user/userSlice';
 import { loginWithEmail } from '../../features/user/userSlice';
 import GoogleButton from 'react-google-button';
@@ -89,13 +89,6 @@ const LoginPage = () => {
           <div className="google__btn">
             <GoogleButton onClick={login} label="Sign in with Google" />
           </div>
-          {/* 구글 로그인 문제 발생시에 밑에 것을 사용 */}
-          {/* <GoogleLogin
-            onSuccess={handleGoogleLogin}
-            onError={() => {
-              console.log('Login Failed');
-            }}
-          /> */}
         </div>
 
         <div className="login__link">

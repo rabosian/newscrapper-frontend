@@ -7,7 +7,6 @@
   flex: 1 0 50%;
   gap: 1em;
   overflow-y: auto;
-  // max-height: fit-content;
   position: relative;
 
   //---------- scroll styling ---------//
@@ -111,7 +110,6 @@
   }
 
   &--active {
-    // background-color: transparent;
     border: 1px solid var(--clr-highlight);
   }
 }

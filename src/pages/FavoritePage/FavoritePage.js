@@ -24,8 +24,6 @@ function FavoritePage() {
     (state) => state.favorite
   );
 
-  // if (loading) return <LoadingSpinner />;
-
   if (!loading && favoriteList.length === 0)
     return (
       <EmptyItem title={'No Favorites Yet'} content={'Add your favorites!'} />

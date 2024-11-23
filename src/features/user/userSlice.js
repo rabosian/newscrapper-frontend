@@ -3,14 +3,6 @@ import api from '../../utils/api';
 import { clearArticle } from '../article/articleSlice';
 import { clearFavorite } from '../favorite/favoriteSlice';
 
-// 필요한 API들
-// 1. signup      done
-// 2. loginWithEmail done
-// 3. loginWithToken done
-// 4. googleLogin done
-// 5. logout      done
-
-// Sign-up
 export const registerUser = createAsyncThunk(
   'user/registerUser',
   async ({ name, email, password, navigate }, { rejectWithValue }) => {
@@ -27,7 +19,6 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Login with Email
 export const loginWithEmail = createAsyncThunk(
   'user/loginWithEmail',
   async ({ email, password }, { rejectWithValue }) => {
@@ -41,7 +32,6 @@ export const loginWithEmail = createAsyncThunk(
   }
 );
 
-// login with token
 export const loginWithToken = createAsyncThunk(
   'user/loginWithToken',
   async (_, { rejectWithValue }) => {
@@ -106,10 +96,10 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true; // 회원가입 성공 여부만 업데이트
+        state.success = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false; // 로딩 상태 초기화
+        state.loading = false;
         state.error = action.payload;
       })
       .addCase(loginWithEmail.pending, (state) => {

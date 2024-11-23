@@ -1,10 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../utils/api';
 import { setUpdatedCommentTotal } from '../article/articleSlice';
-import {
-  getFavoriteArticles,
-  setUpdatedCommentTotalFavorite,
-} from '../favorite/favoriteSlice';
+import { getFavoriteArticles } from '../favorite/favoriteSlice';
 
 export const getComments = createAsyncThunk(
   'comments/getComments',

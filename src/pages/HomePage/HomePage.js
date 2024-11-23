@@ -35,8 +35,6 @@ function HomePage() {
     (state) => state.article
   );
 
-  // if (loading) return <LoadingSpinner />;
-
   return (
     <>
       <main className="home">
