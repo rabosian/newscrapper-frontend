@@ -158,6 +158,8 @@ function CommentUser({ articleId, user, isFromFavorite, eventObj }) {
       // 유저가 suggestedComment 를 클릭하면 그대로 코멘트에 복붙
       if (textarea) {
         textarea.value = matches ? matches[1] : suggestedComment;
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight + 1}px`;
       }
     } else {
       dispatch(suggestComment({ comment: textRef.current.value }));
