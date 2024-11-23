@@ -12,6 +12,7 @@ import {
 import ArticleCard from './ArticleCard';
 import EmptyItem from '../common/EmptyItem';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { clearComment } from '../../features/comment/commentSlice';
 
 function ArticleGrid({ category, articleList, totalPageNum, page, loading }) {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ function ArticleGrid({ category, articleList, totalPageNum, page, loading }) {
   async function handleOpen(item) {
     dispatch(updateArticleViews(item._id));
     dispatch(setSelectedArticle({ ...item, views: item.views + 1 }));
+    dispatch(clearComment());
   }
 
   // favorite trigger
