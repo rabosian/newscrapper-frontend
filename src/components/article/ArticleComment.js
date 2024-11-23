@@ -152,12 +152,9 @@ function CommentUser({ articleId, user, isFromFavorite, eventObj }) {
       setHasUsedSuggestion(true);
       const textarea = textRef.current;
 
-      // ai 가 "" 안에 추천 댓글을 알려주는 경우에 대비해 그 부분만 코멘트에 복붙
-      const matches = suggestedComment.match(/"(.*?)"/);
-
       // 유저가 suggestedComment 를 클릭하면 그대로 코멘트에 복붙
       if (textarea) {
-        textarea.value = matches ? matches[1] : suggestedComment;
+        textarea.value = suggestedComment;
         textarea.style.height = 'auto';
         textarea.style.height = `${textarea.scrollHeight + 1}px`;
       }
