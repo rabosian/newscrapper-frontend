@@ -33,7 +33,6 @@ function FavoritePage() {
 
   return (
     <main className="home">
-      {loading && <LoadingSpinner />}
       <div className="wrapper">
         <ArticleGrid category={'My Favorites'} articleList={favoriteList} />
       </div>
